@@ -1,0 +1,140 @@
+const {
+  loadFixture,
+} = require("@nomicfoundation/hardhat-toolbox/network-helpers");
+const { ethers } = require("hardhat");
+const { expect } = require("chai");
+
+async function deployHomeOwnerToken() {
+  const [owner, addr2, addr3] = await ethers.getSigners();
+  const contract = await ethers.getContractFactory("HomeOwnerToken");
+  const homeOwnerToken = await contract.deploy(owner.address);
+
+  const DEFAULT_ADMIN_ROLE =
+    "0x0000000000000000000000000000000000000000000000000000000000000000";
+  const MINTER_ROLE =
+    "0x9f2df0fed2c77648de5860a4cc508cd0818c85b8b8a1ab4ceeef8d981c8956a6";
+
+  return {
+    homeOwnerToken,
+    owner,
+    addr2,
+    addr3,
+    DEFAULT_ADMIN_ROLE,
+    MINTER_ROLE,
+  };
+}
+
+describe("HomeOwnerToken Contract Tests", function () {
+  describe("Deployment", function () {
+    it("Should return a valid deployment contract address", async function () {
+      const { homeOwnerToken } = await loadFixture(deployHomeOwnerToken);
+      expect(homeOwnerToken.target).to.not.equal(undefined);
+    });
+    it("Should grant the DEFAULT_ADMIN_ROLE to the owner", async function () {
+      const { homeOwnerToken, owner, addr2, DEFAULT_ADMIN_ROLE } =
+        await loadFixture(deployHomeOwnerToken);
+
+      const ownerHasDEFAULT_ADMIN_ROLE = await homeOwnerToken.hasRole(
+        DEFAULT_ADMIN_ROLE,
+        owner.address
+      );
+      expect(ownerHasDEFAULT_ADMIN_ROLE).to.equal(true);
+
+      const addr2HasDEFAULT_ADMIN_ROLE = await homeOwnerToken.hasRole(
+        DEFAULT_ADMIN_ROLE,
+        addr2.address
+      );
+      expect(addr2HasDEFAULT_ADMIN_ROLE).to.equal(false);
+    });
+  });
+  describe("addMinter", function () {
+    it("Should NOT be available to roles other than DEFAULT_ADMIN_ROLE", async function () {
+      const { homeOwnerToken, addr2, addr3, DEFAULT_ADMIN_ROLE } =
+        await loadFixture(deployHomeOwnerToken);
+
+      await expect(homeOwnerToken.connect(addr2).addMinter(addr3.address))
+        .to.be.revertedWithCustomError(
+          homeOwnerToken,
+          "AccessControlUnauthorizedAccount"
+        )
+        .withArgs(addr2.address, DEFAULT_ADMIN_ROLE);
+    });
+    it("Should grant the MINTER_ROLE to an address", async function () {
+      const { homeOwnerToken, owner, addr2, addr3, MINTER_ROLE } =
+        await loadFixture(deployHomeOwnerToken);
+
+      await homeOwnerToken.connect(owner).addMinter(addr3.address);
+
+      const addr3HasMINTER_ROLE = await homeOwnerToken.hasRole(
+        MINTER_ROLE,
+        addr3.address
+      );
+      expect(addr3HasMINTER_ROLE).to.equal(true);
+
+      const addr2HasMINTER_ROLE = await homeOwnerToken.hasRole(
+        MINTER_ROLE,
+        addr2.address
+      );
+      expect(addr2HasMINTER_ROLE).to.equal(false);
+    });
+  });
+
+  describe("mint", function () {
+    it("Should NOT be available to roles other than MINTER_ROLE", async function () {
+      const { homeOwnerToken, owner, MINTER_ROLE } = await loadFixture(
+        deployHomeOwnerToken
+      );
+
+      await expect(homeOwnerToken.connect(owner).mint(owner.address, 999))
+        .to.be.revertedWithCustomError(
+          homeOwnerToken,
+          "AccessControlUnauthorizedAccount"
+        )
+        .withArgs(owner.address, MINTER_ROLE);
+    });
+    it("Should allow the MINTER_ROLE to mint tokens and send them to an address", async function () {
+      const { homeOwnerToken, owner, addr3 } = await loadFixture(
+        deployHomeOwnerToken
+      );
+
+      const tokensToBeAdded = 99999;
+
+      const initialAddr2TokenBalance = await homeOwnerToken
+        .connect(owner)
+        .getTokenBalance(addr3.address);
+
+      await homeOwnerToken.connect(owner).addMinter(owner.address);
+      await homeOwnerToken.connect(owner).mint(addr3.address, tokensToBeAdded);
+
+      const addr2TokenBalanceAfterMint = await homeOwnerToken
+        .connect(owner)
+        .getTokenBalance(addr3.address);
+
+      const expectedAddr2TokenBalance =
+        parseInt(initialAddr2TokenBalance) + tokensToBeAdded;
+
+      expect(addr2TokenBalanceAfterMint).to.equal(expectedAddr2TokenBalance);
+    });
+  });
+
+  describe("getTokenBalance", function () {
+    it("Should return the token balance of an address", async function () {
+      const { homeOwnerToken, owner, addr2 } = await loadFixture(
+        deployHomeOwnerToken
+      );
+
+      const tokensToBeAdded = 777777;
+
+      await homeOwnerToken.connect(owner).addMinter(owner.address);
+      await homeOwnerToken.connect(owner).mint(addr2.address, tokensToBeAdded);
+
+      const addr2TokenBalanceAfterMint = await homeOwnerToken
+        .connect(owner)
+        .getTokenBalance(addr2.address);
+
+      const expectedAddr2TokenBalance = tokensToBeAdded;
+
+      expect(expectedAddr2TokenBalance).to.equal(addr2TokenBalanceAfterMint);
+    });
+  });
+});
