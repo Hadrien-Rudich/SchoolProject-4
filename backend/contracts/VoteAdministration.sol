@@ -61,10 +61,10 @@ contract VoteAdministration is AccessControl {
     }
 
    function addVoter(address _addr) public onlyRole(DEFAULT_ADMIN_ROLE) {
-    if (currentWorkflowStatus != WorkflowStatus.VotingSetUp) {
-            revert CannotAddVotersOutsideOfVotingSetUp();
-        }
-       if (!tokenContract.hasRole(tokenContract.MINTER_ROLE(), address(this))) {
+        if (currentWorkflowStatus != WorkflowStatus.VotingSetUp) {
+                revert CannotAddVotersOutsideOfVotingSetUp();
+                }
+        if (!tokenContract.hasRole(tokenContract.MINTER_ROLE(), address(this))) {
             revert ContractLacksMinterRole();
             }   
         if (hasRole(VOTER_ROLE, _addr)) {
