@@ -3,7 +3,6 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount } from "wagmi";
 import { useContext, useEffect } from "react";
 import { UserContext } from "../context/User.context";
-import { OwnerContext } from "../context/Owner.context";
 
 import { Roboto } from "next/font/google";
 
@@ -12,7 +11,6 @@ const roboto = Roboto({ subsets: ["latin"], weight: ["400", "700"] });
 const Header = () => {
   const { address, isConnected } = useAccount();
   const { user, setUser } = useContext(UserContext);
-  const { owner } = useContext(OwnerContext);
 
   useEffect(() => {
     setUser(isConnected ? address : "");
@@ -29,11 +27,6 @@ const Header = () => {
         Home Owner Tokens
       </h1>
       <ConnectButton />
-      {isConnected && user == owner ? (
-        <p className="text-green-400 ">Connected as owner.</p>
-      ) : (
-        "ZOB"
-      )}
     </header>
   );
 };
