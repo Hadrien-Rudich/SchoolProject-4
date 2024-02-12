@@ -1,10 +1,10 @@
-import { createContext, useState, useEffect } from "react";
-import { useAccount } from "wagmi";
-import { getVoter } from "../utils/VotingAdministration/getVoter";
+import { createContext, useState, useEffect, useMemo } from 'react';
+import { useAccount } from 'wagmi';
+import { getVoter } from '../utils/VoteAdministration/getVoter';
 
 export const VotersContext = createContext();
 
-export const VotersContextProvider = ({ children }) => {
+export function VotersContextProvider({ children }) {
   const { address } = useAccount();
   const [voter, setVoter] = useState(null);
 
@@ -15,16 +15,19 @@ export const VotersContextProvider = ({ children }) => {
         const voterDetails = await getVoter(address);
         setVoter(voterDetails);
       } catch (err) {
-        console.error("Error fetching voter details:", err.message);
+        console.error('Error fetching voter details:', err.message);
       }
     };
 
     fetchVoterDetails();
   }, [address]);
 
-  return (
-    <VotersContext.Provider value={{ voter }}>
-      {children}
-    </VotersContext.Provider>
+  return useMemo(
+    () => (
+      <VotersContext.Provider value={{ voter }}>
+        {children}
+      </VotersContext.Provider>
+    ),
+    [voter, children]
   );
-};
+}

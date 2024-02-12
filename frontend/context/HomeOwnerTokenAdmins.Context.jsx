@@ -1,9 +1,9 @@
-import { createContext, useState, useEffect } from "react";
-import { getAdmins } from "../utils/HomeTokenContract/getAdmins";
+import { createContext, useState, useEffect, useMemo } from 'react';
+import { getAdmins } from '../utils/HomeTokenContract/getAdmins';
 
 export const HomeOwnerTokenAdminsContext = createContext();
 
-export const HomeOwnerTokenAdminsContextProvider = ({ children }) => {
+export function HomeOwnerTokenAdminsContextProvider({ children }) {
   const [admins, setAdmins] = useState([]);
 
   useEffect(() => {
@@ -12,16 +12,19 @@ export const HomeOwnerTokenAdminsContextProvider = ({ children }) => {
         const adminsArray = await getAdmins();
         setAdmins(adminsArray);
       } catch (err) {
-        console.error("Error fetching admins:", err.message);
+        console.error('Error fetching admins:', err.message);
       }
     };
 
     fetchHomeOwnerTokenAdmins();
   }, []);
 
-  return (
-    <HomeOwnerTokenAdminsContext.Provider value={{ admins }}>
-      {children}
-    </HomeOwnerTokenAdminsContext.Provider>
+  return useMemo(
+    () => (
+      <HomeOwnerTokenAdminsContext.Provider value={{ admins }}>
+        {children}
+      </HomeOwnerTokenAdminsContext.Provider>
+    ),
+    [admins, children]
   );
-};
+}

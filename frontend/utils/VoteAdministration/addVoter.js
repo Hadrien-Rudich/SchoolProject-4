@@ -3,10 +3,7 @@ import {
   writeContract,
   waitForTransaction,
 } from "@wagmi/core";
-import {
-  contractAddress,
-  ABI,
-} from "../../constants/VotingAdministration/index";
+import { contractAddress, ABI } from "../../constants/VoteAdministration/index";
 import { getAddress } from "viem";
 
 export const addVoter = async (_addr) => {

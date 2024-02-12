@@ -7,6 +7,8 @@ import { hardhat, sepolia } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
 import { UserContextProvider } from "../context/User.context";
 import { HomeOwnerTokenAdminsContextProvider } from "../context/HomeOwnerTokenAdmins.context";
+import { VoteAdminsContextProvider } from "../context/VoteAdmins.context";
+
 import { VotersContextProvider } from "../context/Voters.context";
 
 const { chains, publicClient } = configureChains(
@@ -33,9 +35,11 @@ export default function RootLayout({ children }) {
         <WagmiConfig config={wagmiConfig}>
           <RainbowKitProvider chains={chains}>
             <HomeOwnerTokenAdminsContextProvider>
-              <VotersContextProvider>
-                <UserContextProvider>{children}</UserContextProvider>
-              </VotersContextProvider>
+              <VoteAdminsContextProvider>
+                <VotersContextProvider>
+                  <UserContextProvider>{children}</UserContextProvider>
+                </VotersContextProvider>
+              </VoteAdminsContextProvider>
             </HomeOwnerTokenAdminsContextProvider>
           </RainbowKitProvider>
         </WagmiConfig>
