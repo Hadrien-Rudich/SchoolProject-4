@@ -34,7 +34,7 @@ async function deployVoteAdministration() {
 }
 
 async function deployQuadraticVoting() {
-  const [owner, addr2] = await ethers.getSigners();
+  const [owner, addr2, addr4] = await ethers.getSigners();
 
   const DEFAULT_ADMIN_ROLE =
     "0x0000000000000000000000000000000000000000000000000000000000000000";
@@ -59,6 +59,7 @@ async function deployQuadraticVoting() {
     owner,
     addr2,
     addr3,
+    addr4,
     DEFAULT_ADMIN_ROLE,
     VOTER_ROLE,
   };
@@ -230,6 +231,19 @@ describe("QuadraticVoting Contract Tests", function () {
         addr3.address
       );
       expect(addr3HasDEFAULT_ADMIN_ROLE).to.equal(true);
+    });
+  });
+  describe("getAdmins", function () {
+    it("Should return the adminsArray", async function () {
+      const { quadraticVoting, owner, addr2, addr4 } = await loadFixture(
+        deployQuadraticVoting
+      );
+
+      await quadraticVoting.connect(owner).grantAdminRole(addr2.address);
+      await quadraticVoting.connect(owner).grantAdminRole(addr4.address);
+
+      const adminsArray = await quadraticVoting.getAdmins();
+      expect(adminsArray).to.eql([owner.address, addr2.address, addr4.address]);
     });
   });
 });

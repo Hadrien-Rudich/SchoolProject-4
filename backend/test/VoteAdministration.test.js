@@ -699,4 +699,17 @@ describe("VoteAdministration Contract Tests", function () {
       expect(addr3HasDEFAULT_ADMIN_ROLE).to.equal(true);
     });
   });
+  describe("getAdmins", function () {
+    it("Should return the adminsArray", async function () {
+      const { voteAdministration, owner, addr2, addr3 } = await loadFixture(
+        deployVoteAdministration
+      );
+
+      await voteAdministration.connect(owner).grantAdminRole(addr2.address);
+      await voteAdministration.connect(owner).grantAdminRole(addr3.address);
+
+      const adminsArray = await voteAdministration.getAdmins();
+      expect(adminsArray).to.eql([owner.address, addr2.address, addr3.address]);
+    });
+  });
 });

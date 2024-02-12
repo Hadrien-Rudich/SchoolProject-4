@@ -239,4 +239,17 @@ describe("HomeOwnerToken Contract Tests", function () {
       expect(addr2HasDEFAULT_ADMIN_ROLE).to.equal(true);
     });
   });
+  describe("getAdmins", function () {
+    it("Should return the adminsArray", async function () {
+      const { homeOwnerToken, owner, addr2, addr3 } = await loadFixture(
+        deployHomeOwnerToken
+      );
+
+      await homeOwnerToken.connect(owner).grantAdminRole(addr2.address);
+      await homeOwnerToken.connect(owner).grantAdminRole(addr3.address);
+
+      const adminsArray = await homeOwnerToken.getAdmins();
+      expect(adminsArray).to.eql([owner.address, addr2.address, addr3.address]);
+    });
+  });
 });

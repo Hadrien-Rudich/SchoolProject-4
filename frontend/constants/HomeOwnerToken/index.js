@@ -418,6 +418,19 @@ export const ABI = [
     type: "function",
   },
   {
+    inputs: [],
+    name: "getAdmins",
+    outputs: [
+      {
+        internalType: "address[]",
+        name: "",
+        type: "address[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [
       {
         internalType: "bytes32",
