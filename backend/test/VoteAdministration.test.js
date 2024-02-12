@@ -655,4 +655,48 @@ describe("VoteAdministration Contract Tests", function () {
       expect(addr2IsVoter).to.equal(true);
     });
   });
+  describe("grantAdminRole", function () {
+    it("Should NOT be available to roles other than DEFAULT_ADMIN_ROLE", async function () {
+      const { voteAdministration, addr2, DEFAULT_ADMIN_ROLE } =
+        await loadFixture(deployVoteAdministration);
+
+      await expect(
+        voteAdministration.connect(addr2).grantAdminRole(addr2.address)
+      )
+        .to.be.revertedWithCustomError(
+          voteAdministration,
+          "AccessControlUnauthorizedAccount"
+        )
+        .withArgs(addr2.address, DEFAULT_ADMIN_ROLE);
+    });
+    it("Should NOT add the DEFAULT_ADMIN_ROLE to an address that has it already", async function () {
+      const { voteAdministration, owner, addr2, DEFAULT_ADMIN_ROLE } =
+        await loadFixture(deployVoteAdministration);
+
+      const ownerHasDEFAULT_ADMIN_ROLE = await voteAdministration.hasRole(
+        DEFAULT_ADMIN_ROLE,
+        owner.address
+      );
+      expect(ownerHasDEFAULT_ADMIN_ROLE).to.equal(true);
+
+      await expect(
+        voteAdministration.connect(owner).grantAdminRole(owner.address)
+      ).to.be.revertedWithCustomError(
+        voteAdministration,
+        "AddressAlreadyAdmin"
+      );
+    });
+    it("Should grant the ADMIN_ROLE to the address", async function () {
+      const { voteAdministration, owner, addr3, DEFAULT_ADMIN_ROLE } =
+        await loadFixture(deployVoteAdministration);
+
+      await voteAdministration.connect(owner).grantAdminRole(addr3.address);
+
+      const addr3HasDEFAULT_ADMIN_ROLE = await voteAdministration.hasRole(
+        DEFAULT_ADMIN_ROLE,
+        addr3.address
+      );
+      expect(addr3HasDEFAULT_ADMIN_ROLE).to.equal(true);
+    });
+  });
 });

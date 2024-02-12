@@ -54,11 +54,13 @@ contract VoteAdministration is AccessControl {
     error VotingSetUpCannotBeStarted();
     error VotingSessionCannotBeStarted();
     error VotingSessionCannotBeEnded();
+    error AddressAlreadyAdmin();
 
-    constructor(address _tokenContractAddress, address initialOwner) {
+    constructor(address _tokenContractAddress, address _initialAdmin) {
         tokenContract = HomeOwnerToken(_tokenContractAddress);
-        _grantRole(DEFAULT_ADMIN_ROLE, initialOwner);
+        _grantRole(DEFAULT_ADMIN_ROLE, _initialAdmin);
     }
+    
 
    function addVoter(address _voterAddress, uint256 _baseVotingPower) public onlyRole(DEFAULT_ADMIN_ROLE) {
         if (currentWorkflowStatus != WorkflowStatus.VotingSetUp) {
@@ -166,5 +168,11 @@ contract VoteAdministration is AccessControl {
 
         emit WorkflowStatusChange(WorkflowStatus.VotingSessionStarted, WorkflowStatus.VotingSessionEnded);
         currentWorkflowStatus = WorkflowStatus.VotingSessionEnded;
+    }
+    function grantAdminRole(address _adminAddress) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        if (hasRole(DEFAULT_ADMIN_ROLE, _adminAddress)) {
+                revert AddressAlreadyAdmin();
+                }           
+        _grantRole(DEFAULT_ADMIN_ROLE, _adminAddress);
     }
 }

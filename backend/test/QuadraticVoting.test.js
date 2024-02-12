@@ -191,4 +191,45 @@ describe("QuadraticVoting Contract Tests", function () {
         .withArgs(addr2.address, 0, 9);
     });
   });
+  describe("grantAdminRole", function () {
+    it("Should NOT be available to roles other than DEFAULT_ADMIN_ROLE", async function () {
+      const { quadraticVoting, addr2, DEFAULT_ADMIN_ROLE } = await loadFixture(
+        deployQuadraticVoting
+      );
+
+      await expect(quadraticVoting.connect(addr2).grantAdminRole(addr2.address))
+        .to.be.revertedWithCustomError(
+          quadraticVoting,
+          "AccessControlUnauthorizedAccount"
+        )
+        .withArgs(addr2.address, DEFAULT_ADMIN_ROLE);
+    });
+    it("Should NOT add the DEFAULT_ADMIN_ROLE to an address that has it already", async function () {
+      const { quadraticVoting, owner, DEFAULT_ADMIN_ROLE } = await loadFixture(
+        deployQuadraticVoting
+      );
+
+      const ownerHasDEFAULT_ADMIN_ROLE = await quadraticVoting.hasRole(
+        DEFAULT_ADMIN_ROLE,
+        owner.address
+      );
+      expect(ownerHasDEFAULT_ADMIN_ROLE).to.equal(true);
+
+      await expect(
+        quadraticVoting.connect(owner).grantAdminRole(owner.address)
+      ).to.be.revertedWithCustomError(quadraticVoting, "AddressAlreadyAdmin");
+    });
+    it("Should grant the ADMIN_ROLE to the address", async function () {
+      const { quadraticVoting, owner, addr3, DEFAULT_ADMIN_ROLE } =
+        await loadFixture(deployQuadraticVoting);
+
+      await quadraticVoting.connect(owner).grantAdminRole(addr3.address);
+
+      const addr3HasDEFAULT_ADMIN_ROLE = await quadraticVoting.hasRole(
+        DEFAULT_ADMIN_ROLE,
+        addr3.address
+      );
+      expect(addr3HasDEFAULT_ADMIN_ROLE).to.equal(true);
+    });
+  });
 });

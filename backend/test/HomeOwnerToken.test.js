@@ -199,4 +199,44 @@ describe("HomeOwnerToken Contract Tests", function () {
       ).to.equal(0);
     });
   });
+  describe("grantAdminRole", function () {
+    it("Should NOT be available to roles other than DEFAULT_ADMIN_ROLE", async function () {
+      const { homeOwnerToken, addr2, addr3, DEFAULT_ADMIN_ROLE } =
+        await loadFixture(deployHomeOwnerToken);
+
+      await expect(homeOwnerToken.connect(addr2).grantAdminRole(addr3.address))
+        .to.be.revertedWithCustomError(
+          homeOwnerToken,
+          "AccessControlUnauthorizedAccount"
+        )
+        .withArgs(addr2.address, DEFAULT_ADMIN_ROLE);
+    });
+    it("Should NOT add the DEFAULT_ADMIN_ROLE to an address that has it already", async function () {
+      const { homeOwnerToken, owner, DEFAULT_ADMIN_ROLE } = await loadFixture(
+        deployHomeOwnerToken
+      );
+
+      const ownerHasDEFAULT_ADMIN_ROLE = await homeOwnerToken.hasRole(
+        DEFAULT_ADMIN_ROLE,
+        owner.address
+      );
+      expect(ownerHasDEFAULT_ADMIN_ROLE).to.equal(true);
+
+      await expect(
+        homeOwnerToken.connect(owner).grantAdminRole(owner.address)
+      ).to.be.revertedWithCustomError(homeOwnerToken, "AddressAlreadyAdmin");
+    });
+    it("Should grant the ADMIN_ROLE to the address", async function () {
+      const { homeOwnerToken, owner, addr2, DEFAULT_ADMIN_ROLE } =
+        await loadFixture(deployHomeOwnerToken);
+
+      await homeOwnerToken.connect(owner).grantAdminRole(addr2.address);
+
+      const addr2HasDEFAULT_ADMIN_ROLE = await homeOwnerToken.hasRole(
+        DEFAULT_ADMIN_ROLE,
+        addr2.address
+      );
+      expect(addr2HasDEFAULT_ADMIN_ROLE).to.equal(true);
+    });
+  });
 });
