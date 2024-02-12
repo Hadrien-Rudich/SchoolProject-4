@@ -23,7 +23,7 @@ contract VoteAdministration is AccessControl {
         bool votingIsClosed;
         bool isAccepted;
     }
-    Proposal[] public proposalsArray;
+    Proposal[] private proposalsArray;
     mapping(uint256 => Proposal) public proposals;
 
     struct Voter {
@@ -31,7 +31,7 @@ contract VoteAdministration is AccessControl {
         uint256 baseVotingPower;        
         address voterAddress;
     }
-    Voter[] public votersArray;
+    Voter[] private votersArray;
     mapping(address => Voter) public voters;
 
     enum WorkflowStatus {
@@ -184,4 +184,5 @@ contract VoteAdministration is AccessControl {
     function getAdmins() external view returns (address[] memory) {
         return adminsArray;
     }
+    
 }

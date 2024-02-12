@@ -1,24 +1,18 @@
 import { createContext, useState, useEffect } from "react";
-import { getAdmins } from "../utils/getters/HomeTokenContract/getAdmins";
+import { getAdmins } from "../utils/HomeTokenContract/getAdmins";
 
 export const HomeOwnerTokenAdminsContext = createContext();
 
 export const HomeOwnerTokenAdminsContextProvider = ({ children }) => {
   const [admins, setAdmins] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchHomeOwnerTokenAdmins = async () => {
-      setIsLoading(true);
       try {
         const adminsArray = await getAdmins();
         setAdmins(adminsArray);
       } catch (err) {
         console.error("Error fetching admins:", err.message);
-        setError(err.message);
-      } finally {
-        setIsLoading(false);
       }
     };
 
@@ -26,9 +20,7 @@ export const HomeOwnerTokenAdminsContextProvider = ({ children }) => {
   }, []);
 
   return (
-    <HomeOwnerTokenAdminsContext.Provider
-      value={{ admins, setAdmins, isLoading, error }}
-    >
+    <HomeOwnerTokenAdminsContext.Provider value={{ admins }}>
       {children}
     </HomeOwnerTokenAdminsContext.Provider>
   );

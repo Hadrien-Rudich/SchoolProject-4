@@ -1,5 +1,5 @@
 import { readContract } from "@wagmi/core";
-import { contractAddress, ABI } from "../../../constants/HomeOwnerToken/index";
+import { contractAddress, ABI } from "../../constants/HomeOwnerToken/index";
 
 export const getAdmins = async () => {
   try {
