@@ -8,9 +8,10 @@ contract HomeOwnerToken is ERC20, AccessControl {
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     bytes32 public constant BURNER_ROLE = keccak256("BURNER_ROLE");
 
+    error AddressAlreadyAdmin();
 
-    constructor(address initialOwner) ERC20("HomeOwnerToken", "HOT") {
-        _grantRole(DEFAULT_ADMIN_ROLE, initialOwner);
+    constructor(address _initialAdmin) ERC20("HomeOwnerToken", "HOT") {
+        _grantRole(DEFAULT_ADMIN_ROLE, _initialAdmin);
     }
 
     function addMinterBurner(address _minterBurnerContractAddress) public onlyRole(DEFAULT_ADMIN_ROLE) {
@@ -29,5 +30,12 @@ contract HomeOwnerToken is ERC20, AccessControl {
 
     function burn(address _voterAddress, uint256 _tokenAmount) external onlyRole(BURNER_ROLE) {
         _burn(_voterAddress, _tokenAmount);
+    }
+
+    function grantAdminRole(address _adminAddress) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        if (hasRole(DEFAULT_ADMIN_ROLE, _adminAddress)) {
+                revert AddressAlreadyAdmin();
+                }           
+        _grantRole(DEFAULT_ADMIN_ROLE, _adminAddress);
     }
 }

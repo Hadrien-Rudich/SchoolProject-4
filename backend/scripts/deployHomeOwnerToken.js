@@ -7,6 +7,7 @@ async function main() {
     signers[0].address,
   ]);
 
+  console.log(signers[0].address);
   await HomeOwnerToken.waitForDeployment();
 
   console.log(

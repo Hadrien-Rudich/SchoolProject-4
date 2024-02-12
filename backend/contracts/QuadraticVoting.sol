@@ -11,10 +11,10 @@ contract QuadraticVoting is AccessControl {
     HomeOwnerToken public tokenContract;
 
     
-    constructor(address _tokenContractAddress, address _voteAdminContractAddress, address initialOwner) {
+    constructor(address _tokenContractAddress, address _voteAdminContractAddress, address _initialAdmin) {
         tokenContract = HomeOwnerToken(_tokenContractAddress);
         voteAdminContract = VoteAdministration(_voteAdminContractAddress);
-        _grantRole(DEFAULT_ADMIN_ROLE, initialOwner);
+        _grantRole(DEFAULT_ADMIN_ROLE, _initialAdmin);
     }
 
     // Struct to hold vote details - could be expanded as needed
@@ -30,7 +30,7 @@ contract QuadraticVoting is AccessControl {
 
     error UserLacksVoterRole();
     error VoterLacksCredits();
-
+    error AddressAlreadyAdmin();
 
     function castVote(uint256 proposalId, uint256 additionalVotingPower) public {
         if (!voteAdminContract.hasRole(voteAdminContract.VOTER_ROLE(), msg.sender)) {
@@ -47,6 +47,12 @@ contract QuadraticVoting is AccessControl {
 
     }
 
+   function grantAdminRole(address _adminAddress) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        if (hasRole(DEFAULT_ADMIN_ROLE, _adminAddress)) {
+                revert AddressAlreadyAdmin();
+                }           
+        _grantRole(DEFAULT_ADMIN_ROLE, _adminAddress);
+    }
    
 }
 

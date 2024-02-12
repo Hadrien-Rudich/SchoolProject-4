@@ -1,34 +1,38 @@
 "use client";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
-import { getDefaultConfig, RainbowKitProvider } from "@rainbow-me/rainbowkit";
-import { WagmiProvider } from "wagmi";
+import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
+import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import { hardhat, sepolia } from "wagmi/chains";
-import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
-import { UserContextProvider } from "@/context/User.context";
+import { publicProvider } from "wagmi/providers/public";
+import { UserContextProvider } from "../context/User.context";
 
-const inter = Inter({ subsets: ["latin"] });
+const { chains, publicClient } = configureChains(
+  [hardhat, sepolia],
+  [publicProvider()]
+);
 
-const config = getDefaultConfig({
+const { connectors } = getDefaultWallets({
   appName: "My RainbowKit App",
-  projectId: "YOUR_PROJECT_ID",
-  chains: [hardhat, sepolia],
+  projectId: "3bba0b6a7bfce219a7d7c6bc15967edd",
+  chains,
 });
 
-const queryClient = new QueryClient();
+const wagmiConfig = createConfig({
+  autoConnect: false,
+  connectors,
+  publicClient,
+});
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <WagmiProvider config={config}>
-          <QueryClientProvider client={queryClient}>
-            <RainbowKitProvider>
-              <UserContextProvider>{children}</UserContextProvider>
-            </RainbowKitProvider>
-          </QueryClientProvider>
-        </WagmiProvider>
+      <body>
+        <WagmiConfig config={wagmiConfig}>
+          <RainbowKitProvider chains={chains}>
+            <UserContextProvider>{children}</UserContextProvider>
+          </RainbowKitProvider>
+        </WagmiConfig>
       </body>
     </html>
   );

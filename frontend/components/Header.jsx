@@ -2,7 +2,8 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount } from "wagmi";
 import { useContext, useEffect } from "react";
-import { UserContext } from "@/context/User.context";
+import { UserContext } from "../context/User.context";
+
 import { Roboto } from "next/font/google";
 
 const roboto = Roboto({ subsets: ["latin"], weight: ["400", "700"] });
@@ -26,11 +27,6 @@ const Header = () => {
         Home Owner Tokens
       </h1>
       <ConnectButton />
-      {/* {isConnected && user == owner ? (
-        <p className="text-green-400 ">Connected as owner.</p>
-      ) : (
-        ""
-      )} */}
     </header>
   );
 };
