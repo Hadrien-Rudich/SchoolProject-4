@@ -6,32 +6,31 @@ import "./HomeOwnerToken.sol";
 
 contract VoteAdministration is AccessControl {
 
+    HomeOwnerToken public tokenContract;
+    uint256 public proposalCounter;
+    uint256 public voterCounter;
+    uint256 public tokensPerNewVoter = 100;
+
+    bytes32 public constant VOTER_ROLE = keccak256("VOTER_ROLE");
+
     struct Proposal {
         uint256 proposalId;
         string title;
         string description;
-        uint voteCount;
+        uint256 voteCount;
         bool votingIsClosed;
         bool isAccepted;
-        // mapping(address => bool) votersInFavor;
     }
-
-    uint256 public proposalCounter;
     Proposal[] public proposalsArray;
-
     mapping(uint256 => Proposal) public proposals;
 
     struct Voter {
-        // Tracks the amount of voting power a voter has allocated to each proposal.
-        // This represents the square root of the votes cast.
-        mapping(uint256 => uint256) votingPowerAllocated;
-        
+        uint256 voterId;
+        uint256 baseVotingPower;        
+        address voterAddress;
     }
-    
-    HomeOwnerToken public tokenContract;
-    bytes32 public constant VOTER_ROLE = keccak256("VOTER_ROLE");
-    uint256 private tokensPerNewVoter = 100;
-    mapping(address => Voter) private voters;
+    Voter[] public votersArray;
+    mapping(address => Voter) public voters;
 
     enum WorkflowStatus {
         VotingPowerAllocation,
@@ -42,12 +41,13 @@ contract VoteAdministration is AccessControl {
 
     WorkflowStatus public currentWorkflowStatus;
 
-    event VoterRegistered(address voterAddress);
-    event ProposalRegistered(uint256 proposalId);
+    event VoterRegistered(address voterAddress, uint256 voterId);
+    event ProposalRegistered(string title, uint256 proposalId);
     event WorkflowStatusChange(WorkflowStatus previousStatus, WorkflowStatus newStatus);
 
     error ContractLacksMinterRole();
     error AddressAlreadyVoter();
+    error AddressIsNotVoter();
     error CannotSetTokensOutsideOfVotingPowerAllocationWindow();
     error CannotAddVotersOutsideOfVotingSetUp();
     error CannotAddProposalsOutsideOfVotingSetUp();
@@ -60,39 +60,37 @@ contract VoteAdministration is AccessControl {
         _grantRole(DEFAULT_ADMIN_ROLE, initialOwner);
     }
 
-   function addVoter(address _addr) public onlyRole(DEFAULT_ADMIN_ROLE) {
-    if (currentWorkflowStatus != WorkflowStatus.VotingSetUp) {
-            revert CannotAddVotersOutsideOfVotingSetUp();
-        }
-       if (!tokenContract.hasRole(tokenContract.MINTER_ROLE(), address(this))) {
+   function addVoter(address _voterAddress, uint256 _baseVotingPower) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        if (currentWorkflowStatus != WorkflowStatus.VotingSetUp) {
+                revert CannotAddVotersOutsideOfVotingSetUp();
+                }
+        if (!tokenContract.hasRole(tokenContract.MINTER_ROLE(), address(this))) {
             revert ContractLacksMinterRole();
             }   
-        if (hasRole(VOTER_ROLE, _addr)) {
+        if (hasRole(VOTER_ROLE, _voterAddress)) {
             revert AddressAlreadyVoter();
             }    
-        _grantRole(VOTER_ROLE, _addr);
-        tokenContract.mint(_addr, tokensPerNewVoter);
-        emit VoterRegistered(_addr);
+        _grantRole(VOTER_ROLE, _voterAddress);
+        tokenContract.mint(_voterAddress, tokensPerNewVoter);
+
+            voterCounter += 1; 
+
+         Voter memory newVoter = Voter({
+            voterId: voterCounter,
+            voterAddress: _voterAddress,
+            baseVotingPower: _baseVotingPower
+        });
+
+        voters[_voterAddress] = newVoter;
+        votersArray.push(newVoter);
+        emit VoterRegistered(_voterAddress, voterCounter);
     }
 
-    // function getProposal(uint256 proposalId) external view returns (string memory title, string memory description, uint voteCount, bool votingIsClosed, bool isAccepted) {
-    //     Proposal storage proposal = proposals[proposalId];
-    //     return (proposal.title, proposal.description, proposal.voteCount, proposal.votingIsClosed, proposal.isAccepted);
-    // }
-
-    function isVoter(address _addr) external view returns (bool) {
-        return hasRole(VOTER_ROLE, _addr);
-    }
-
-    function getVoterTokenBalance(address _addr) public view returns (uint256) {   
-        return tokenContract.balanceOf(_addr);
-    }
-
-function addProposal(string calldata _title, string calldata _description) public onlyRole(DEFAULT_ADMIN_ROLE) {
+   function addProposal(string calldata _title, string calldata _description) public onlyRole(DEFAULT_ADMIN_ROLE) {
         if (currentWorkflowStatus != WorkflowStatus.VotingSetUp) {
             revert CannotAddProposalsOutsideOfVotingSetUp();
         }
-        
+
         proposalCounter += 1; 
 
         Proposal memory newProposal = Proposal({
@@ -104,13 +102,30 @@ function addProposal(string calldata _title, string calldata _description) publi
             isAccepted: false
         });
 
-        proposals[proposalCounter] = newProposal;
+        proposals[proposalCounter] = newProposal; 
+        proposalsArray.push(newProposal); 
 
+        emit ProposalRegistered(_title, proposalCounter);
+    }
 
-        proposalsArray.push(newProposal);
-        
-        emit ProposalRegistered(proposalCounter);
-    }   
+     function getVoter(address _voterAddress) public view returns (Voter memory) {
+        if (!hasRole(VOTER_ROLE, _voterAddress)) {
+            revert AddressIsNotVoter();
+            }         
+        return voters[_voterAddress];
+    }
+
+    function getProposal(uint256 _proposalId) external view returns (Proposal memory){
+        return proposals[_proposalId];       
+    }
+
+    function isVoter(address _addr) external view returns (bool) {
+        return hasRole(VOTER_ROLE, _addr);
+    }
+
+    function getVoterTokenBalance(address _addr) public view returns (uint256) {   
+        return tokenContract.balanceOf(_addr);
+    }
 
     function setTokensPerNewVoter(uint256 _tokensPerNewVoter) public onlyRole(DEFAULT_ADMIN_ROLE) {
        
@@ -140,6 +155,13 @@ function addProposal(string calldata _title, string calldata _description) publi
     function endVotingSession() external onlyRole(DEFAULT_ADMIN_ROLE) {
        if (currentWorkflowStatus != WorkflowStatus.VotingSessionStarted) {
             revert VotingSessionCannotBeEnded();
+        }
+
+        for (uint256 i = 0; i < votersArray.length; i++) {
+            uint256 voterBalance = tokenContract.balanceOf(votersArray[i].voterAddress);
+            if (voterBalance > 0) {
+                tokenContract.burn(votersArray[i].voterAddress, voterBalance);
+            }
         }
 
         emit WorkflowStatusChange(WorkflowStatus.VotingSessionStarted, WorkflowStatus.VotingSessionEnded);

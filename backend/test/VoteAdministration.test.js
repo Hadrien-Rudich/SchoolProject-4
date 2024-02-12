@@ -35,7 +35,7 @@ async function deployVoteAdministration() {
   };
 }
 
-async function deployVoteAdminWithMINTER_ROLE() {
+async function deployVoteAdminWithMINTERBURNER_ROLE() {
   const [addr1, addr2, addr3] = await ethers.getSigners();
   const { homeOwnerToken, owner } = await loadFixture(deployHomeOwnerToken);
 
@@ -45,7 +45,9 @@ async function deployVoteAdminWithMINTER_ROLE() {
     addr1.address
   );
 
-  await homeOwnerToken.connect(owner).addMinter(voteAdministration.target);
+  await homeOwnerToken
+    .connect(owner)
+    .addMinterBurner(voteAdministration.target);
 
   return {
     voteAdministration,
@@ -67,7 +69,9 @@ async function deployVoteAdminInVotingSetUpWithMINTER_ROLE() {
     addr1.address
   );
 
-  await homeOwnerToken.connect(owner).addMinter(voteAdministration.target);
+  await homeOwnerToken
+    .connect(owner)
+    .addMinterBurner(voteAdministration.target);
   await voteAdministration.connect(addr1).setUpVotingSession();
 
   return {
@@ -125,7 +129,9 @@ describe("VoteAdministration Contract Tests", function () {
       const { voteAdministration, addr2, DEFAULT_ADMIN_ROLE } =
         await loadFixture(deployVoteAdministration);
 
-      await expect(voteAdministration.connect(addr2).addVoter(addr2.address))
+      await expect(
+        voteAdministration.connect(addr2).addVoter(addr2.address, 200)
+      )
         .to.be.revertedWithCustomError(
           voteAdministration,
           "AccessControlUnauthorizedAccount"
@@ -134,11 +140,11 @@ describe("VoteAdministration Contract Tests", function () {
     });
     it("Should NOT be available outside of VotingSetUp window", async function () {
       const { voteAdministration, owner, addr3 } = await loadFixture(
-        deployVoteAdminWithMINTER_ROLE
+        deployVoteAdminWithMINTERBURNER_ROLE
       );
 
       await expect(
-        voteAdministration.connect(owner).addVoter(addr3)
+        voteAdministration.connect(owner).addVoter(addr3.address, 200)
       ).to.be.revertedWithCustomError(
         voteAdministration,
         "CannotAddVotersOutsideOfVotingSetUp"
@@ -152,7 +158,7 @@ describe("VoteAdministration Contract Tests", function () {
       await voteAdministration.connect(owner).setUpVotingSession();
 
       await expect(
-        voteAdministration.connect(owner).addVoter(addr2.address)
+        voteAdministration.connect(owner).addVoter(addr2.address, 200)
       ).to.be.revertedWithCustomError(
         voteAdministration,
         "ContractLacksMinterRole"
@@ -163,21 +169,66 @@ describe("VoteAdministration Contract Tests", function () {
         deployVoteAdminInVotingSetUpWithMINTER_ROLE
       );
 
-      await voteAdministration.connect(addr1).addVoter(addr2.address);
+      await voteAdministration.connect(addr1).addVoter(addr2.address, 200);
 
       await expect(
-        voteAdministration.connect(addr1).addVoter(addr2.address)
+        voteAdministration.connect(addr1).addVoter(addr2.address, 200)
       ).to.be.revertedWithCustomError(
         voteAdministration,
         "AddressAlreadyVoter"
       );
+    });
+
+    it("Should increment voterCounter by 1", async function () {
+      const { voteAdministration, owner } = await loadFixture(
+        deployVoteAdminInVotingSetUpWithMINTER_ROLE
+      );
+
+      await voteAdministration
+        .connect(owner)
+        .addVoter("0x5B38Da6a701c568545dCfcB03FcB875f56beddC4", 200);
+      await voteAdministration
+        .connect(owner)
+        .addVoter("0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2", 200);
+      await voteAdministration
+        .connect(owner)
+        .addVoter("0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db", 200);
+
+      await expect(
+        voteAdministration
+          .connect(owner)
+          .addVoter("0x78731D3Ca6b7E34aC0F824c42a7cC18A495cabaB", 200)
+      )
+        .to.emit(voteAdministration, "VoterRegistered")
+        .withArgs("0x78731D3Ca6b7E34aC0F824c42a7cC18A495cabaB", 4);
+    });
+    it("Should create a Voter Struct with the expected content", async function () {
+      const { voteAdministration, owner } = await loadFixture(
+        deployVoteAdminInVotingSetUpWithMINTER_ROLE
+      );
+
+      const newVoterAddress = "0x5B38Da6a701c568545dCfcB03FcB875f56beddC4";
+      const newVoterBaseVotingPower = 200;
+
+      await voteAdministration
+        .connect(owner)
+        .addVoter(newVoterAddress, newVoterBaseVotingPower);
+
+      const voter = await voteAdministration.getVoter(newVoterAddress);
+
+      const currentVoterCount = await voteAdministration.voterCounter();
+      const voterIndex = parseInt(currentVoterCount);
+
+      expect(voter.voterId).to.equal(voterIndex);
+      expect(voter.baseVotingPower).to.equal(newVoterBaseVotingPower);
+      expect(voter.voterAddress).to.equal(newVoterAddress);
     });
     it("Should grant the VOTER_ROLE to the address", async function () {
       const { voteAdministration, addr1, addr2 } = await loadFixture(
         deployVoteAdminInVotingSetUpWithMINTER_ROLE
       );
 
-      await voteAdministration.connect(addr1).addVoter(addr2.address);
+      await voteAdministration.connect(addr1).addVoter(addr2.address, 200);
 
       const addr2IsVoter = await voteAdministration.isVoter(addr2.address);
       expect(addr2IsVoter).to.equal(true);
@@ -188,7 +239,7 @@ describe("VoteAdministration Contract Tests", function () {
         deployVoteAdminInVotingSetUpWithMINTER_ROLE
       );
 
-      await voteAdministration.connect(addr1).addVoter(addr2.address);
+      await voteAdministration.connect(addr1).addVoter(addr2.address, 200);
 
       const voterTokenBalance = await voteAdministration
         .connect(addr1)
@@ -201,44 +252,11 @@ describe("VoteAdministration Contract Tests", function () {
         deployVoteAdminInVotingSetUpWithMINTER_ROLE
       );
 
-      await expect(voteAdministration.connect(addr1).addVoter(addr2.address))
+      await expect(
+        voteAdministration.connect(addr1).addVoter(addr2.address, 200)
+      )
         .to.emit(voteAdministration, "VoterRegistered")
-        .withArgs(addr2.address);
-    });
-  });
-  describe("isVoter", function () {
-    it("Should return true if an address has the VOTER_ROLE", async function () {
-      const { voteAdministration, addr1, addr2, addr3 } = await loadFixture(
-        deployVoteAdminInVotingSetUpWithMINTER_ROLE
-      );
-
-      const addr3IsNotVoter = await voteAdministration.isVoter(addr3.address);
-      expect(addr3IsNotVoter).to.equal(false);
-
-      await voteAdministration.connect(addr1).addVoter(addr2.address);
-
-      const addr2IsVoter = await voteAdministration.isVoter(addr2.address);
-      expect(addr2IsVoter).to.equal(true);
-    });
-  });
-  describe("getVoterTokenBalance", function () {
-    it("Should return a voter's owned tokens", async function () {
-      const { voteAdministration, addr1, addr2 } = await loadFixture(
-        deployVoteAdminInVotingSetUpWithMINTER_ROLE
-      );
-
-      await voteAdministration.connect(addr1).addVoter(addr2.address);
-
-      const addr2IsVoter = await voteAdministration
-        .connect(addr1)
-        .isVoter(addr2.address);
-
-      expect(addr2IsVoter).to.equal(true);
-
-      const voterTokenBalance = await voteAdministration
-        .connect(addr1)
-        .getVoterTokenBalance(addr2.address);
-      expect(voterTokenBalance).to.be.eq(100);
+        .withArgs(addr2.address, 1);
     });
   });
 
@@ -296,7 +314,7 @@ describe("VoteAdministration Contract Tests", function () {
           .addProposal("Test Title 4", "Test Description 4")
       )
         .to.emit(voteAdministration, "ProposalRegistered")
-        .withArgs(4);
+        .withArgs("Test Title 4", 4);
     });
 
     it("Should create a Proposal Struct with the expected content", async function () {
@@ -304,15 +322,17 @@ describe("VoteAdministration Contract Tests", function () {
         deployVoteAdminInVotingSetUpWithMINTER_ROLE
       );
 
-      const title = "Proposal Title";
-      const description = "Proposal Description";
+      const title = "Proposal Title1";
+      const description = "Proposal Description1";
 
       await voteAdministration.connect(owner).addProposal(title, description);
 
-      const proposalCount = await voteAdministration.proposalCounter();
-      const proposalIndex = parseInt(proposalCount) - 1;
-      const proposal = await voteAdministration.proposalsArray(proposalIndex);
+      const currentProposalCount = await voteAdministration.proposalCounter();
+      const proposalIndex = parseInt(currentProposalCount);
 
+      const proposal = await voteAdministration.getProposal(proposalIndex);
+
+      expect(proposal.proposalId).to.equal(proposalIndex);
       expect(proposal.title).to.equal(title);
       expect(proposal.description).to.equal(description);
       expect(proposal.voteCount.toString()).to.equal("0");
@@ -331,7 +351,7 @@ describe("VoteAdministration Contract Tests", function () {
           .addProposal("Test Title", "Test Description")
       )
         .to.emit(voteAdministration, "ProposalRegistered")
-        .withArgs(1);
+        .withArgs("Test Title", 1);
     });
   });
 
@@ -365,14 +385,14 @@ describe("VoteAdministration Contract Tests", function () {
 
     it("Should set a new amount of tokens to be received by new voter", async function () {
       const { voteAdministration, addr1, addr2 } = await loadFixture(
-        deployVoteAdminWithMINTER_ROLE
+        deployVoteAdminWithMINTERBURNER_ROLE
       );
 
       await voteAdministration.connect(addr1).setTokensPerNewVoter(999);
 
       await voteAdministration.connect(addr1).setUpVotingSession();
 
-      await voteAdministration.connect(addr1).addVoter(addr2.address);
+      await voteAdministration.connect(addr1).addVoter(addr2.address, 1);
 
       const voterTokenBalance = await voteAdministration
         .connect(addr1)
@@ -497,6 +517,44 @@ describe("VoteAdministration Contract Tests", function () {
         "VotingSessionCannotBeEnded"
       );
     });
+
+    it("Should burn all remaining voter tokens", async function () {
+      const { voteAdministration, owner, addr2, addr3 } = await loadFixture(
+        deployVoteAdminInVotingSetUpWithMINTER_ROLE
+      );
+
+      await voteAdministration.connect(owner).addVoter(addr2.address, 1);
+      await voteAdministration.connect(owner).addVoter(addr3.address, 1);
+
+      await voteAdministration.connect(owner).startVotingSession();
+
+      expect(
+        await voteAdministration
+          .connect(owner)
+          .getVoterTokenBalance(addr2.address)
+      ).to.be.eq(100);
+
+      expect(
+        await voteAdministration
+          .connect(owner)
+          .getVoterTokenBalance(addr3.address)
+      ).to.be.eq(100);
+
+      await voteAdministration.connect(owner).endVotingSession();
+
+      expect(
+        await voteAdministration
+          .connect(owner)
+          .getVoterTokenBalance(addr2.address)
+      ).to.be.eq(0);
+
+      expect(
+        await voteAdministration
+          .connect(owner)
+          .getVoterTokenBalance(addr3.address)
+      ).to.be.eq(0);
+    });
+
     it("Should change the currentWorkflowStatus to VotingSessionEnded", async function () {
       const { voteAdministration, owner } = await loadFixture(
         deployVoteAdminInVotingSetUpWithMINTER_ROLE
@@ -518,6 +576,83 @@ describe("VoteAdministration Contract Tests", function () {
       await expect(voteAdministration.connect(owner).endVotingSession())
         .to.emit(voteAdministration, "WorkflowStatusChange")
         .withArgs(2, 3);
+    });
+  });
+  describe("getVoter", function () {
+    it("Should return a custom error for an address that is not a Voter", async function () {
+      const { voteAdministration, owner, addr2 } = await loadFixture(
+        deployVoteAdministration
+      );
+
+      await expect(
+        voteAdministration.connect(owner).getVoter(addr2.address)
+      ).to.be.revertedWithCustomError(voteAdministration, "AddressIsNotVoter");
+    });
+
+    it("Should return a Voter's Struct", async function () {
+      const { voteAdministration, addr1, addr2 } = await loadFixture(
+        deployVoteAdminInVotingSetUpWithMINTER_ROLE
+      );
+
+      await voteAdministration.connect(addr1).addVoter(addr2.address, 200);
+
+      const voter = await voteAdministration.getVoter(addr2.address);
+      expect(voter.voterId).to.equal(1);
+      expect(voter.baseVotingPower).to.equal(200);
+      expect(voter.voterAddress).to.equal(addr2.address);
+    });
+  });
+
+  describe("getProposal", function () {
+    it("Should return a Proposal's Struct", async function () {
+      const { voteAdministration, addr1, addr2 } = await loadFixture(
+        deployVoteAdminInVotingSetUpWithMINTER_ROLE
+      );
+      const newProposalTitle = "Title";
+      const newProposalDescription = "Description";
+      await voteAdministration
+        .connect(addr1)
+        .addProposal(newProposalTitle, newProposalDescription);
+      const proposalIndex = voteAdministration.proposalCounter();
+      const proposal = await voteAdministration.getProposal(proposalIndex);
+      expect(proposal.title).to.equal(newProposalTitle);
+      expect(proposal.description).to.equal(newProposalDescription);
+    });
+  });
+
+  describe("getVoterTokenBalance", function () {
+    it("Should return a voter's owned tokens", async function () {
+      const { voteAdministration, addr1, addr2 } = await loadFixture(
+        deployVoteAdminInVotingSetUpWithMINTER_ROLE
+      );
+
+      await voteAdministration.connect(addr1).addVoter(addr2.address, 200);
+
+      const addr2IsVoter = await voteAdministration
+        .connect(addr1)
+        .isVoter(addr2.address);
+
+      expect(addr2IsVoter).to.equal(true);
+
+      const voterTokenBalance = await voteAdministration
+        .connect(addr1)
+        .getVoterTokenBalance(addr2.address);
+      expect(voterTokenBalance).to.be.eq(100);
+    });
+  });
+  describe("isVoter", function () {
+    it("Should return true if an address has the VOTER_ROLE", async function () {
+      const { voteAdministration, addr1, addr2, addr3 } = await loadFixture(
+        deployVoteAdminInVotingSetUpWithMINTER_ROLE
+      );
+
+      const addr3IsNotVoter = await voteAdministration.isVoter(addr3.address);
+      expect(addr3IsNotVoter).to.equal(false);
+
+      await voteAdministration.connect(addr1).addVoter(addr2.address, 200);
+
+      const addr2IsVoter = await voteAdministration.isVoter(addr2.address);
+      expect(addr2IsVoter).to.equal(true);
     });
   });
 });
