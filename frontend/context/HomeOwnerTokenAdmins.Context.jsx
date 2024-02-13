@@ -1,4 +1,5 @@
-import { createContext, useState, useEffect, useMemo } from 'react';
+/* eslint-disable react/jsx-no-constructed-context-values */
+import { createContext, useState, useEffect } from 'react';
 import { getAdmins } from '../utils/HomeTokenContract/getAdmins';
 
 export const HomeOwnerTokenAdminsContext = createContext();
@@ -19,12 +20,9 @@ export function HomeOwnerTokenAdminsContextProvider({ children }) {
     fetchHomeOwnerTokenAdmins();
   }, []);
 
-  return useMemo(
-    () => (
-      <HomeOwnerTokenAdminsContext.Provider value={{ admins }}>
-        {children}
-      </HomeOwnerTokenAdminsContext.Provider>
-    ),
-    [admins, children]
+  return (
+    <HomeOwnerTokenAdminsContext.Provider value={{ admins }}>
+      {children}
+    </HomeOwnerTokenAdminsContext.Provider>
   );
 }

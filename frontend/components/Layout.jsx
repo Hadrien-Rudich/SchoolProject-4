@@ -1,14 +1,20 @@
 'use client';
 
 import Header from './Header';
-import Sidebar from './Sidebar/Sidebar';
+import Workflows from './Workflows/Workflows';
+import Dashboard from './Dashboard/Dashboard';
 
 function Layout({ children }) {
   return (
     <div className="w-full h-full">
       <Header />
-      <div className="flex w-full h-full ml-6">
-        <Sidebar />
+      <div className="w-full h-full flex flex-col gap-6">
+        <div className="w-full">
+          <Workflows />
+        </div>
+        <div className="w-full h-full">
+          <Dashboard />
+        </div>
       </div>
 
       <div className="">{children}</div>

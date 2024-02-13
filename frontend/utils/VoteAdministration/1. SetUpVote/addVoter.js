@@ -2,9 +2,12 @@ import {
   prepareWriteContract,
   writeContract,
   waitForTransaction,
-} from "@wagmi/core";
-import { contractAddress, ABI } from "../../constants/VoteAdministration/index";
-import { getAddress } from "viem";
+} from '@wagmi/core';
+import {
+  contractAddress,
+  ABI,
+} from '../../../constants/VoteAdministration/index';
+import { getAddress } from 'viem';
 
 export const addVoter = async (_addr) => {
   let _ethAddress = getAddress(_addr);
@@ -12,7 +15,7 @@ export const addVoter = async (_addr) => {
     const { request } = await prepareWriteContract({
       address: contractAddress,
       abi: ABI,
-      functionName: "addVoter",
+      functionName: 'addVoter',
       args: [_ethAddress],
     });
 
@@ -23,9 +26,9 @@ export const addVoter = async (_addr) => {
     return data;
   } catch (err) {
     if (err.code === 4001) {
-      console.log("Transaction rejected by user.");
+      console.log('Transaction rejected by user.');
     } else {
-      console.log("🔴 Error in addVoter: ", err.message);
+      console.log('🔴 Error in addVoter: ', err.message);
     }
     throw err;
   }

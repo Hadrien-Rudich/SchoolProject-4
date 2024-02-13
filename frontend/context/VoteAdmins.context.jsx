@@ -1,4 +1,5 @@
-import { createContext, useState, useEffect, useMemo } from 'react';
+/* eslint-disable react/jsx-no-constructed-context-values */
+import { createContext, useState, useEffect } from 'react';
 import { getAdmins } from '../utils/VoteAdministration/getAdmins';
 
 export const VoteAdminsContext = createContext();
@@ -19,12 +20,9 @@ export function VoteAdminsContextProvider({ children }) {
     fetchVoteAdmins();
   }, []);
 
-  return useMemo(
-    () => (
-      <VoteAdminsContext.Provider value={{ voteAdmins }}>
-        {children}
-      </VoteAdminsContext.Provider>
-    ),
-    [voteAdmins, children]
+  return (
+    <VoteAdminsContext.Provider value={{ voteAdmins }}>
+      {children}
+    </VoteAdminsContext.Provider>
   );
 }

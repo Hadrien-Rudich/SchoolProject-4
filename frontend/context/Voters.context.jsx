@@ -1,4 +1,5 @@
-import { createContext, useState, useEffect, useMemo } from 'react';
+/* eslint-disable react/jsx-no-constructed-context-values */
+import { createContext, useState, useEffect } from 'react';
 import { useAccount } from 'wagmi';
 import { getVoter } from '../utils/VoteAdministration/getVoter';
 
@@ -22,12 +23,9 @@ export function VotersContextProvider({ children }) {
     fetchVoterDetails();
   }, [address]);
 
-  return useMemo(
-    () => (
-      <VotersContext.Provider value={{ voter }}>
-        {children}
-      </VotersContext.Provider>
-    ),
-    [voter, children]
+  return (
+    <VotersContext.Provider value={{ voter }}>
+      {children}
+    </VotersContext.Provider>
   );
 }
