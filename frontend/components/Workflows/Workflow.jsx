@@ -1,13 +1,15 @@
 import { useContext } from 'react';
-import startVote from '../../utils/VoteAdministration/2. StartVote/startVote';
 import { WorkflowContext } from '../../context/Workflow.context';
 
-function StartVote() {
+function Workflow({ id, label, method }) {
   const { updateWorkflow } = useContext(WorkflowContext);
 
-  const handleStartVote = async () => {
+  const handleClick = async () => {
     try {
-      await startVote();
+      if (id === 0 || id === 3) {
+        return;
+      }
+      await method();
       await updateWorkflow();
     } catch (error) {
       console.log(error);
@@ -19,12 +21,12 @@ function StartVote() {
       <button
         className="w-full h-full bg-blue-400 rounded-sm"
         type="button"
-        onClick={handleStartVote}
+        onClick={handleClick}
       >
-        Start Vote
+        {label}
       </button>
     </div>
   );
 }
 
-export default StartVote;
+export default Workflow;
