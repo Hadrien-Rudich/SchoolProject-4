@@ -1,9 +1,17 @@
+import { useContext } from 'react';
 import setUpVote from '../../utils/VoteAdministration/1. SetUpVote/setUpVote';
+import { WorkflowContext } from '../../context/Workflow.context';
 
 function SetUpVote() {
-  const handleSetUpVote = () => {
-    setUpVote();
-    console.log('Set Up Vote');
+  const { updateWorkflow } = useContext(WorkflowContext);
+
+  const handleSetUpVote = async () => {
+    try {
+      await setUpVote();
+      await updateWorkflow();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

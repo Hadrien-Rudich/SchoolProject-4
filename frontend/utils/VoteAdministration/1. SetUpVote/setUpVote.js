@@ -11,6 +11,7 @@ const setUpVote = async () => {
       abi: ABI,
       functionName: 'setUpVotingSession',
     });
+    console.log(data);
     return data;
   } catch (err) {
     if (err.code === 4001) {

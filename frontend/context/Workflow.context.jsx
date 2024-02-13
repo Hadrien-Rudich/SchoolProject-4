@@ -12,35 +12,36 @@ export function WorkflowContextProvider({ children }) {
   const [workflowStatusLogs, setWorkflowStatusLogs] = useState([]);
   const [workflowStatus, setWorkflowStatus] = useState([
     {
-      id: 1,
+      id: 0,
       label: 'Voting Power Allocation',
       active: true,
       ended: false,
     },
     {
-      id: 2,
+      id: 1,
       label: 'Set Up Vote',
       method: setUpVote,
       active: false,
       ended: false,
     },
     {
-      id: 3,
+      id: 2,
       label: 'Start Vote',
       method: startVote,
       active: false,
       ended: false,
     },
     {
-      id: 4,
+      id: 3,
       label: 'End Vote',
       method: endVote,
       active: false,
       ended: false,
     },
+    { id: 4, label: 'Vote Ended', active: false, ended: false },
   ]);
 
-  const [currentWorkflow, setCurrentWorkflow] = useState(0);
+  const [currentWorkflow, setCurrentWorkflow] = useState(1);
 
   const client = getPublicClient();
 
@@ -55,33 +56,25 @@ export function WorkflowContextProvider({ children }) {
       });
 
       const allEvents = workflowStatusChangeLogs.map((log) => ({
-        previousStatus: log.args.previousStatus.toNumber(),
-        newStatus: log.args.newStatus.toNumber(),
+        previousStatus: log.args.previousStatus,
+        newStatus: log.args.newStatus,
       }));
 
-      console.log('allEvents', allEvents);
       setWorkflowStatusLogs(allEvents);
 
-      // Find the most recent newStatus
-      const latestEvent = allEvents.reduce(
-        (latest, event) =>
-          !latest || event.newStatus > latest.newStatus ? event : latest,
-        null
-      );
-
-      if (latestEvent) {
-        // Set the current workflow based on the latest newStatus
-        setCurrentWorkflow(latestEvent.newStatus);
+      if (allEvents.length > 0) {
+        const latestEvent = allEvents[allEvents.length - 1];
+        setCurrentWorkflow(latestEvent.newStatus + 1);
       }
     } catch (error) {
       console.error('Error fetching logs:', error);
     }
-  }; // Added an empty array as the second argument
+  };
 
   useEffect(() => {
-    // Fetch logs on component mount
     updateWorkflow();
-  }, []); // Empty dependency array means this effect runs once on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <WorkflowContext.Provider

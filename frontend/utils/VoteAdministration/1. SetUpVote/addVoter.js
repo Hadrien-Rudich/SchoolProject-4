@@ -3,25 +3,25 @@ import {
   writeContract,
   waitForTransaction,
 } from '@wagmi/core';
+import { getAddress } from 'viem';
 import {
   contractAddress,
   ABI,
 } from '../../../constants/VoteAdministration/index';
-import { getAddress } from 'viem';
 
-export const addVoter = async (_addr) => {
-  let _ethAddress = getAddress(_addr);
+const addVoter = async (_addr) => {
+  const ethAddress = getAddress(_addr);
   try {
     const { request } = await prepareWriteContract({
       address: contractAddress,
       abi: ABI,
       functionName: 'addVoter',
-      args: [_ethAddress],
+      args: [ethAddress],
     });
 
     const { hash } = await writeContract(request);
     const data = await waitForTransaction({
-      hash: hash,
+      hash,
     });
     return data;
   } catch (err) {
@@ -33,3 +33,5 @@ export const addVoter = async (_addr) => {
     throw err;
   }
 };
+
+export default addVoter;

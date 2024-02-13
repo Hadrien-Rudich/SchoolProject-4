@@ -1,9 +1,17 @@
+import { useContext } from 'react';
 import endVote from '../../utils/VoteAdministration/3. EndVote/endVote';
+import { WorkflowContext } from '../../context/Workflow.context';
 
 function EndVote() {
-  const handleEndVote = () => {
-    endVote();
-    console.log('End Vote');
+  const { updateWorkflow } = useContext(WorkflowContext);
+
+  const handleEndVote = async () => {
+    try {
+      await endVote();
+      await updateWorkflow();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
