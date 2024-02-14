@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-no-constructed-context-values */
 import { createContext, useState, useEffect } from 'react';
 import { useAccount } from 'wagmi';
-import { getVoter } from '../utils/VoteAdministration/getVoter';
+import getVoter from '../utils/getters/getVoter';
 
 export const VotersContext = createContext();
 

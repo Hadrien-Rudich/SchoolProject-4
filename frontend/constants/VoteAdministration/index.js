@@ -372,6 +372,51 @@ export const ABI = [
     type: 'function',
   },
   {
+    inputs: [],
+    name: 'getProposals',
+    outputs: [
+      {
+        components: [
+          {
+            internalType: 'uint256',
+            name: 'proposalId',
+            type: 'uint256',
+          },
+          {
+            internalType: 'string',
+            name: 'title',
+            type: 'string',
+          },
+          {
+            internalType: 'string',
+            name: 'description',
+            type: 'string',
+          },
+          {
+            internalType: 'uint256',
+            name: 'voteCount',
+            type: 'uint256',
+          },
+          {
+            internalType: 'bool',
+            name: 'votingIsClosed',
+            type: 'bool',
+          },
+          {
+            internalType: 'bool',
+            name: 'isAccepted',
+            type: 'bool',
+          },
+        ],
+        internalType: 'struct VoteAdministration.Proposal[]',
+        name: '',
+        type: 'tuple[]',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
     inputs: [
       {
         internalType: 'bytes32',

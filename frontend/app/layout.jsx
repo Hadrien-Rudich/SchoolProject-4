@@ -10,7 +10,7 @@ import { UserContextProvider } from '../context/User.context';
 import { HomeOwnerTokenAdminsContextProvider } from '../context/HomeOwnerTokenAdmins.context';
 import { VoteAdminsContextProvider } from '../context/VoteAdmins.context';
 import { WorkflowContextProvider } from '../context/Workflow.context';
-
+import { ProposalsContextProvider } from '../context/Proposals.context';
 import { VotersContextProvider } from '../context/Voters.context';
 
 const { chains, publicClient } = configureChains(
@@ -39,9 +39,11 @@ export default function RootLayout({ children }) {
             <HomeOwnerTokenAdminsContextProvider>
               <WorkflowContextProvider>
                 <VoteAdminsContextProvider>
-                  <VotersContextProvider>
-                    <UserContextProvider>{children}</UserContextProvider>
-                  </VotersContextProvider>
+                  <ProposalsContextProvider>
+                    <VotersContextProvider>
+                      <UserContextProvider>{children}</UserContextProvider>
+                    </VotersContextProvider>
+                  </ProposalsContextProvider>
                 </VoteAdminsContextProvider>
               </WorkflowContextProvider>
             </HomeOwnerTokenAdminsContextProvider>

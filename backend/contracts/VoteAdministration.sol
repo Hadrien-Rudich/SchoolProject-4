@@ -184,5 +184,9 @@ contract VoteAdministration is AccessControl {
     function getAdmins() external view returns (address[] memory) {
         return adminsArray;
     }
+
+     function getProposals() external view returns (Proposal[] memory) {
+        return proposalsArray;
+    }
     
 }

@@ -1,10 +1,11 @@
-import {
-  useState,
-  // useContext
-} from 'react';
+import { useState, useEffect, useContext } from 'react';
 import addProposal from '../../../utils/VoteAdministration/1. SetUpVote/addProposal';
+import { ProposalsContext } from '../../../context/Proposals.context';
+import getProposals from '../../../utils/getters/getProposals';
 
 function AddProposalModal({ toggleModal }) {
+  const { proposalsArray, setProposalsArray } = useContext(ProposalsContext);
+
   const [inputTitle, setInputTitle] = useState('');
   const [inputDescription, setInputDescription] = useState('');
 
@@ -29,6 +30,19 @@ function AddProposalModal({ toggleModal }) {
       console.error('Error during transaction:', error);
     }
   };
+
+  useEffect(() => {
+    const fetchProposals = async () => {
+      try {
+        const data = await getProposals();
+        setProposalsArray(data);
+      } catch (error) {
+        console.error('Error during transaction:', error);
+        throw error;
+      }
+    };
+    fetchProposals();
+  }, [setProposalsArray, proposalsArray]);
 
   return (
     <div className="absolute top-[16.66%] left-[16.66%] h-2/3 w-2/3 bg-purple-500 rounded-sm">

@@ -19,7 +19,6 @@ function Workflow({ id, label, method }) {
   return (
     <div className="w-1/4">
       <button
-        // className="w-full h-full bg-gray-400 rounded-sm"
         className={`${
           id < currentWorkflow
             ? 'bg-green-400 w-full h-full rounded-sm'

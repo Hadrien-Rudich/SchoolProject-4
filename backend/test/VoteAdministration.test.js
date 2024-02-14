@@ -712,4 +712,30 @@ describe("VoteAdministration Contract Tests", function () {
       expect(adminsArray).to.eql([owner.address, addr2.address, addr3.address]);
     });
   });
+  describe("getProposals", function () {
+    it("Should return the proposalsArray", async function () {
+      const { voteAdministration, owner } = await loadFixture(
+        deployVoteAdminInVotingSetUpWithMINTER_ROLE
+      );
+
+      await voteAdministration
+        .connect(owner)
+        .addProposal("Title1", "Description1");
+      await voteAdministration
+        .connect(owner)
+        .addProposal("Title2", "Description2");
+      await voteAdministration
+        .connect(owner)
+        .addProposal("Title3", "Description3");
+
+      const proposalsArray = await voteAdministration.getProposals();
+      expect(proposalsArray).to.eql([
+        [1n, "Title1", "Description1", 0n, false, false],
+
+        [2n, "Title2", "Description2", 0n, false, false],
+
+        [3n, "Title3", "Description3", 0n, false, false],
+      ]);
+    });
+  });
 });

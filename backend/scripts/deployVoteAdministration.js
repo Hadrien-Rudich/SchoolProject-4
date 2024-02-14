@@ -12,7 +12,7 @@ async function main() {
   await VoteAdministration.waitForDeployment();
 
   console.log(
-    `VoteAdministration contract was deployed to: ${VoteAdministration.target}`
+    `VoteAdministration contract with Minter/Burner role was deployed to: ${VoteAdministration.target}`
   );
 }
 
