@@ -37,20 +37,20 @@ function AddProposalModal({ toggleModal }) {
         className="flex flex-col gap-y-3 p-5 text-indigo-200"
       >
         <div className="w-full flex items-center gap-4">
-          <p className="w-1/5 text-white">title</p>
+          <p className="w-1/5 text-white">Proposal Title</p>
           <input
             type="text"
             value={inputTitle}
-            placeholder="Proposal title..."
+            placeholder="Enter a title..."
             onChange={handleTitleChange}
             className="p-2 bg-blue-100 rounded-sm placeholder-blue-300 font-semibold text-gray-900 w-2/3 my-3"
           />
         </div>
         <div className="w-full flex items-center gap-4">
-          <p className="w-1/5 text-white">description</p>
+          <p className="w-1/5 text-white">Proposal Description</p>
           <textarea
             value={inputDescription}
-            placeholder="Proposal description..."
+            placeholder="Enter a description..."
             onChange={handleDescriptionChange}
             className="p-2 bg-blue-100 rounded-sm placeholder-blue-300 font-semibold text-gray-900 w-2/3 my-3 h-80 resize-vertical"
           />

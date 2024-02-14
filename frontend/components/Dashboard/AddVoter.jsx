@@ -38,17 +38,17 @@ function AddVoter() {
         className="flex flex-col  gap-y-3 p-5 text-indigo-200"
       >
         <div className="w-full flex items-center gap-4">
-          <p className="w-1/5 text-white">address</p>
+          <p className="w-1/5 text-white">New Voter Address</p>
           <input
             type="text"
             value={inputAddress}
-            placeholder="voter's address..."
+            placeholder="0x000000...."
             onChange={handleAddressChange}
             className="p-2 bg-blue-100 rounded-sm placeholder-blue-300 font-semibold text-gray-900 w-2/3 my-3"
           />
         </div>
         <div className="w-full flex items-center gap-4">
-          <p className="w-1/5 text-white">power</p>
+          <p className="w-1/5 text-white">Base Voting Power</p>
           <input
             type="text"
             value={inputBaseVotingPower}

@@ -1,7 +1,3 @@
-// import StartVote from './StartVote';
-// import EndVote from './EndVote';
-// import SetUpVote from './SetUpVote';
-// import VotingPowerAllocation from './VotingPowerAllocation';
 import { useContext } from 'react';
 import Workflow from './Workflow';
 import { WorkflowContext } from '../../context/Workflow.context';
@@ -19,10 +15,6 @@ function Workflows() {
             method={workflow.method}
           />
         ))}
-        {/* <VotingPowerAllocation />
-        <SetUpVote />
-        <StartVote />
-        <EndVote /> */}
       </div>
     </div>
   );
