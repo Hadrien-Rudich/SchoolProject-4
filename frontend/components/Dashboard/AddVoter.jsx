@@ -61,7 +61,7 @@ function AddVoter() {
           <button
             type="submit"
             onClick={handleSubmit}
-            className="text-green-400 border-2 tracking-wide font-semibold w-fit self-center p-2 rounded-md border-green-400 hover:bg-green-950 hover:translate-y-1"
+            className="w-1/6 text-green-400 border-2 tracking-wide font-semibold  self-center p-2 rounded-md border-green-400 hover:bg-green-950 hover:translate-y-1"
           >
             Add Voter
           </button>

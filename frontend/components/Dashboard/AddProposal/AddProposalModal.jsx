@@ -2,13 +2,11 @@ import {
   useState,
   // useContext
 } from 'react';
-import addProposal from '../../utils/VoteAdministration/1. SetUpVote/addProposal';
+import addProposal from '../../../utils/VoteAdministration/1. SetUpVote/addProposal';
 
-function AddProposal() {
+function AddProposalModal({ toggleModal }) {
   const [inputTitle, setInputTitle] = useState('');
   const [inputDescription, setInputDescription] = useState('');
-
-  // const { admins } = useContext(VoteAdminsContext);
 
   const handleTitleChange = (e) => {
     setInputTitle(e.target.value);
@@ -24,6 +22,8 @@ function AddProposal() {
       const data = await addProposal(inputTitle, inputDescription);
       if (data.status === 'success') {
         setInputTitle('');
+        setInputDescription('');
+        toggleModal();
       }
     } catch (error) {
       console.error('Error during transaction:', error);
@@ -31,11 +31,10 @@ function AddProposal() {
   };
 
   return (
-    <div className="w-full">
+    <div className="absolute top-[16.66%] left-[16.66%] h-2/3 w-2/3 bg-purple-500 rounded-sm">
       <form
-        action="submit"
         onSubmit={handleSubmit}
-        className="flex flex-col  gap-y-3 p-5 text-indigo-200"
+        className="flex flex-col gap-y-3 p-5 text-indigo-200"
       >
         <div className="w-full flex items-center gap-4">
           <p className="w-1/5 text-white">title</p>
@@ -49,26 +48,34 @@ function AddProposal() {
         </div>
         <div className="w-full flex items-center gap-4">
           <p className="w-1/5 text-white">description</p>
-          <input
-            type="text"
+          <textarea
             value={inputDescription}
             placeholder="Proposal description..."
             onChange={handleDescriptionChange}
-            className=" p-2 bg-blue-100 rounded-sm placeholder-blue-300 font-semibold text-gray-900 w-2/3 my-3"
+            className="p-2 bg-blue-100 rounded-sm placeholder-blue-300 font-semibold text-gray-900 w-2/3 my-3 h-80 resize-vertical"
           />
         </div>
-        <div className="w-full flex justify-center">
-          <button
-            type="submit"
-            onClick={handleSubmit}
-            className="text-green-400 border-2 tracking-wide font-semibold w-fit self-center p-2 rounded-md border-green-400 hover:bg-green-950 hover:translate-y-1"
-          >
-            Add Proposl
-          </button>
+        <div className="mt-10 flex">
+          <div className="w-1/5" />
+          <div className="w-2/3 flex justify-around">
+            <button
+              type="button"
+              onClick={toggleModal}
+              className="w-1/3 text-red-500 border-2 tracking-wide font-semibold self-center p-2 rounded-md border-red-500 hover:bg-red-950 hover:translate-y-1"
+            >
+              Close Proposal
+            </button>
+            <button
+              type="submit"
+              className="w-1/3 text-green-400 border-2 tracking-wide font-semibold self-center p-2 rounded-md border-green-400 hover:bg-green-950 hover:translate-y-1"
+            >
+              Add Proposal
+            </button>
+          </div>
         </div>
       </form>
     </div>
   );
 }
 
-export default AddProposal;
+export default AddProposalModal;

@@ -4,7 +4,7 @@ import { WorkflowContext } from '../../context/Workflow.context';
 import { VoteAdminsContext } from '../../context/VoteAdmins.context';
 import SetTokens from './SetTokens';
 import AddVoter from './AddVoter';
-import AddProposal from './AddProposal';
+import NewProposal from './AddProposal/AddProposal';
 
 function Dashboard() {
   const { address } = useAccount();
@@ -15,9 +15,9 @@ function Dashboard() {
       <div className="flex w-2/3 h-full bg-pink-400 gap-2">
         {currentWorkflow === 1 && voteAdmins.includes(address) && <SetTokens />}
         {currentWorkflow === 2 && voteAdmins.includes(address) && (
-          <div className="w-full flex">
+          <div className="w-full flex flex-col gap-10">
             <AddVoter />
-            <AddProposal />
+            <NewProposal />
           </div>
         )}
       </div>
