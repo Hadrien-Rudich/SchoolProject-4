@@ -45,7 +45,7 @@ function AddProposalModal({ toggleModal }) {
   }, [setProposalsArray, proposalsArray]);
 
   return (
-    <div className="absolute top-[16.66%] left-[16.66%] h-2/3 w-2/3 bg-purple-500 rounded-sm">
+    <div className="absolute top-0 w-full bg-purple-500 rounded-sm">
       <form
         onSubmit={handleSubmit}
         className="flex flex-col gap-y-3 p-5 text-indigo-200"

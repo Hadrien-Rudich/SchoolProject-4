@@ -5,11 +5,11 @@ import { ProposalsContext } from '../../../context/Proposals.context';
 function Proposals() {
   const { proposalsArray } = useContext(ProposalsContext);
   return (
-    <div className="h-full flex flex-wrap justify-around">
+    <div className="h-1/3 w-full grid grid-cols-2 gap-2">
       {proposalsArray.map((proposal) => (
         <Proposal
-          key={proposal.id}
-          id={proposal.id}
+          key={proposal.proposalId}
+          id={Number(proposal.proposalId)}
           title={proposal.title}
           description={proposal.description}
         />

@@ -1,26 +1,22 @@
-import {
-  useState,
-  // useContext
-} from 'react';
+import { useState } from 'react';
 import AddProposalModal from './AddProposalModal';
 
 function NewProposal() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
-  // const { admins } = useContext(VoteAdminsContext);
   const toggleModal = () => {
     setModalIsOpen(!modalIsOpen);
   };
   return (
-    <div className="w-full">
+    <div className="w-full h-full">
       {modalIsOpen ? (
         <AddProposalModal toggleModal={toggleModal} />
       ) : (
-        <div className="w-full flex justify-center">
+        <div className="w-full h-full flex justify-center items-center">
           <button
             type="submit"
             onClick={toggleModal}
-            className="w-1/6 text-yellow-400 border-2 tracking-wide font-semibold self-center p-2 rounded-md border-yellow-400 hover:bg-yellow-950 hover:translate-y-1"
+            className="w-1/3 text-yellow-400 border-2 tracking-wide font-semibold self-center p-2 rounded-md border-yellow-400 hover:bg-yellow-950 hover:translate-y-1"
           >
             New Proposal
           </button>
