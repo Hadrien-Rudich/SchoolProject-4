@@ -1,11 +1,17 @@
-"use client";
-import "./globals.css";
-import "@rainbow-me/rainbowkit/styles.css";
-import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
-import { configureChains, createConfig, WagmiConfig } from "wagmi";
-import { hardhat, sepolia } from "wagmi/chains";
-import { publicProvider } from "wagmi/providers/public";
-import { UserContextProvider } from "../context/User.context";
+'use client';
+
+import './globals.css';
+import '@rainbow-me/rainbowkit/styles.css';
+import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
+import { configureChains, createConfig, WagmiConfig } from 'wagmi';
+import { hardhat, sepolia } from 'wagmi/chains';
+import { publicProvider } from 'wagmi/providers/public';
+import { UserContextProvider } from '../context/User.context';
+import { HomeOwnerTokenAdminsContextProvider } from '../context/HomeOwnerTokenAdmins.context';
+import { VoteAdminsContextProvider } from '../context/VoteAdmins.context';
+import { WorkflowContextProvider } from '../context/Workflow.context';
+import { ProposalsContextProvider } from '../context/Proposals.context';
+import { VotersContextProvider } from '../context/Voters.context';
 
 const { chains, publicClient } = configureChains(
   [hardhat, sepolia],
@@ -13,8 +19,8 @@ const { chains, publicClient } = configureChains(
 );
 
 const { connectors } = getDefaultWallets({
-  appName: "My RainbowKit App",
-  projectId: "3bba0b6a7bfce219a7d7c6bc15967edd",
+  appName: 'My RainbowKit App',
+  projectId: '3bba0b6a7bfce219a7d7c6bc15967edd',
   chains,
 });
 
@@ -30,7 +36,17 @@ export default function RootLayout({ children }) {
       <body>
         <WagmiConfig config={wagmiConfig}>
           <RainbowKitProvider chains={chains}>
-            <UserContextProvider>{children}</UserContextProvider>
+            <HomeOwnerTokenAdminsContextProvider>
+              <WorkflowContextProvider>
+                <VoteAdminsContextProvider>
+                  <ProposalsContextProvider>
+                    <VotersContextProvider>
+                      <UserContextProvider>{children}</UserContextProvider>
+                    </VotersContextProvider>
+                  </ProposalsContextProvider>
+                </VoteAdminsContextProvider>
+              </WorkflowContextProvider>
+            </HomeOwnerTokenAdminsContextProvider>
           </RainbowKitProvider>
         </WagmiConfig>
       </body>

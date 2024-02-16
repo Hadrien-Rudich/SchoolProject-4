@@ -10,11 +10,14 @@ contract QuadraticVoting is AccessControl {
     VoteAdministration public voteAdminContract;
     HomeOwnerToken public tokenContract;
 
+    address[] private adminsArray;
+
     
     constructor(address _tokenContractAddress, address _voteAdminContractAddress, address _initialAdmin) {
         tokenContract = HomeOwnerToken(_tokenContractAddress);
         voteAdminContract = VoteAdministration(_voteAdminContractAddress);
         _grantRole(DEFAULT_ADMIN_ROLE, _initialAdmin);
+        adminsArray.push(_initialAdmin);
     }
 
     // Struct to hold vote details - could be expanded as needed
@@ -52,6 +55,12 @@ contract QuadraticVoting is AccessControl {
                 revert AddressAlreadyAdmin();
                 }           
         _grantRole(DEFAULT_ADMIN_ROLE, _adminAddress);
+        adminsArray.push(_adminAddress);
+
+    }
+
+      function getAdmins() external view returns (address[] memory) {
+        return adminsArray;
     }
    
 }

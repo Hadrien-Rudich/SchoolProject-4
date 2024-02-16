@@ -11,6 +11,8 @@ contract VoteAdministration is AccessControl {
     uint256 public voterCounter;
     uint256 public tokensPerNewVoter = 100;
 
+    address[] private adminsArray;
+
     bytes32 public constant VOTER_ROLE = keccak256("VOTER_ROLE");
 
     struct Proposal {
@@ -21,7 +23,7 @@ contract VoteAdministration is AccessControl {
         bool votingIsClosed;
         bool isAccepted;
     }
-    Proposal[] public proposalsArray;
+    Proposal[] private proposalsArray;
     mapping(uint256 => Proposal) public proposals;
 
     struct Voter {
@@ -29,7 +31,7 @@ contract VoteAdministration is AccessControl {
         uint256 baseVotingPower;        
         address voterAddress;
     }
-    Voter[] public votersArray;
+    Voter[] private votersArray;
     mapping(address => Voter) public voters;
 
     enum WorkflowStatus {
@@ -59,6 +61,7 @@ contract VoteAdministration is AccessControl {
     constructor(address _tokenContractAddress, address _initialAdmin) {
         tokenContract = HomeOwnerToken(_tokenContractAddress);
         _grantRole(DEFAULT_ADMIN_ROLE, _initialAdmin);
+        adminsArray.push(_initialAdmin);
     }
     
 
@@ -174,5 +177,16 @@ contract VoteAdministration is AccessControl {
                 revert AddressAlreadyAdmin();
                 }           
         _grantRole(DEFAULT_ADMIN_ROLE, _adminAddress);
+        adminsArray.push(_adminAddress);
+
     }
+
+    function getAdmins() external view returns (address[] memory) {
+        return adminsArray;
+    }
+
+     function getProposals() external view returns (Proposal[] memory) {
+        return proposalsArray;
+    }
+    
 }

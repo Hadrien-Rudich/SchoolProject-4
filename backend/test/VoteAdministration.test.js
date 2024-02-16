@@ -699,4 +699,43 @@ describe("VoteAdministration Contract Tests", function () {
       expect(addr3HasDEFAULT_ADMIN_ROLE).to.equal(true);
     });
   });
+  describe("getAdmins", function () {
+    it("Should return the adminsArray", async function () {
+      const { voteAdministration, owner, addr2, addr3 } = await loadFixture(
+        deployVoteAdministration
+      );
+
+      await voteAdministration.connect(owner).grantAdminRole(addr2.address);
+      await voteAdministration.connect(owner).grantAdminRole(addr3.address);
+
+      const adminsArray = await voteAdministration.getAdmins();
+      expect(adminsArray).to.eql([owner.address, addr2.address, addr3.address]);
+    });
+  });
+  describe("getProposals", function () {
+    it("Should return the proposalsArray", async function () {
+      const { voteAdministration, owner } = await loadFixture(
+        deployVoteAdminInVotingSetUpWithMINTER_ROLE
+      );
+
+      await voteAdministration
+        .connect(owner)
+        .addProposal("Title1", "Description1");
+      await voteAdministration
+        .connect(owner)
+        .addProposal("Title2", "Description2");
+      await voteAdministration
+        .connect(owner)
+        .addProposal("Title3", "Description3");
+
+      const proposalsArray = await voteAdministration.getProposals();
+      expect(proposalsArray).to.eql([
+        [1n, "Title1", "Description1", 0n, false, false],
+
+        [2n, "Title2", "Description2", 0n, false, false],
+
+        [3n, "Title3", "Description3", 0n, false, false],
+      ]);
+    });
+  });
 });

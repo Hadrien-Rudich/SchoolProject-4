@@ -1,4 +1,4 @@
-export const contractAddress = '0x5fbdb2315678afecb367f032d93f642f64180aa3';
+export const contractAddress = '0xe7f1725e7734ce288f8367e1bb143e90bb3f0512';
 
 export const ABI = [
   {
@@ -8,6 +8,11 @@ export const ABI = [
   },
   {
     inputs: [
+      {
+        internalType: 'address',
+        name: '_tokenContractAddress',
+        type: 'address',
+      },
       {
         internalType: 'address',
         name: '_initialAdmin',
@@ -44,114 +49,67 @@ export const ABI = [
     type: 'error',
   },
   {
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'spender',
-        type: 'address',
-      },
-      {
-        internalType: 'uint256',
-        name: 'allowance',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: 'needed',
-        type: 'uint256',
-      },
-    ],
-    name: 'ERC20InsufficientAllowance',
+    inputs: [],
+    name: 'AddressAlreadyVoter',
     type: 'error',
   },
   {
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'sender',
-        type: 'address',
-      },
-      {
-        internalType: 'uint256',
-        name: 'balance',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: 'needed',
-        type: 'uint256',
-      },
-    ],
-    name: 'ERC20InsufficientBalance',
+    inputs: [],
+    name: 'AddressIsNotVoter',
     type: 'error',
   },
   {
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'approver',
-        type: 'address',
-      },
-    ],
-    name: 'ERC20InvalidApprover',
+    inputs: [],
+    name: 'CannotAddProposalsOutsideOfVotingSetUp',
     type: 'error',
   },
   {
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'receiver',
-        type: 'address',
-      },
-    ],
-    name: 'ERC20InvalidReceiver',
+    inputs: [],
+    name: 'CannotAddVotersOutsideOfVotingSetUp',
     type: 'error',
   },
   {
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'sender',
-        type: 'address',
-      },
-    ],
-    name: 'ERC20InvalidSender',
+    inputs: [],
+    name: 'CannotSetTokensOutsideOfVotingPowerAllocationWindow',
     type: 'error',
   },
   {
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'spender',
-        type: 'address',
-      },
-    ],
-    name: 'ERC20InvalidSpender',
+    inputs: [],
+    name: 'ContractLacksMinterRole',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'VotingSessionCannotBeEnded',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'VotingSessionCannotBeStarted',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'VotingSetUpCannotBeStarted',
     type: 'error',
   },
   {
     anonymous: false,
     inputs: [
       {
-        indexed: true,
-        internalType: 'address',
-        name: 'owner',
-        type: 'address',
-      },
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'spender',
-        type: 'address',
+        indexed: false,
+        internalType: 'string',
+        name: 'title',
+        type: 'string',
       },
       {
         indexed: false,
         internalType: 'uint256',
-        name: 'value',
+        name: 'proposalId',
         type: 'uint256',
       },
     ],
-    name: 'Approval',
+    name: 'ProposalRegistered',
     type: 'event',
   },
   {
@@ -233,39 +191,39 @@ export const ABI = [
     anonymous: false,
     inputs: [
       {
-        indexed: true,
+        indexed: false,
         internalType: 'address',
-        name: 'from',
-        type: 'address',
-      },
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'to',
+        name: 'voterAddress',
         type: 'address',
       },
       {
         indexed: false,
         internalType: 'uint256',
-        name: 'value',
+        name: 'voterId',
         type: 'uint256',
       },
     ],
-    name: 'Transfer',
+    name: 'VoterRegistered',
     type: 'event',
   },
   {
-    inputs: [],
-    name: 'BURNER_ROLE',
-    outputs: [
+    anonymous: false,
+    inputs: [
       {
-        internalType: 'bytes32',
-        name: '',
-        type: 'bytes32',
+        indexed: false,
+        internalType: 'enum VoteAdministration.WorkflowStatus',
+        name: 'previousStatus',
+        type: 'uint8',
+      },
+      {
+        indexed: false,
+        internalType: 'enum VoteAdministration.WorkflowStatus',
+        name: 'newStatus',
+        type: 'uint8',
       },
     ],
-    stateMutability: 'view',
-    type: 'function',
+    name: 'WorkflowStatusChange',
+    type: 'event',
   },
   {
     inputs: [],
@@ -282,7 +240,7 @@ export const ABI = [
   },
   {
     inputs: [],
-    name: 'MINTER_ROLE',
+    name: 'VOTER_ROLE',
     outputs: [
       {
         internalType: 'bytes32',
@@ -296,94 +254,19 @@ export const ABI = [
   {
     inputs: [
       {
-        internalType: 'address',
-        name: '_burnerContractAddress',
-        type: 'address',
+        internalType: 'string',
+        name: '_title',
+        type: 'string',
+      },
+      {
+        internalType: 'string',
+        name: '_description',
+        type: 'string',
       },
     ],
-    name: 'addBurner',
+    name: 'addProposal',
     outputs: [],
     stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '_minterBurnerContractAddress',
-        type: 'address',
-      },
-    ],
-    name: 'addMinterBurner',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'owner',
-        type: 'address',
-      },
-      {
-        internalType: 'address',
-        name: 'spender',
-        type: 'address',
-      },
-    ],
-    name: 'allowance',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'spender',
-        type: 'address',
-      },
-      {
-        internalType: 'uint256',
-        name: 'value',
-        type: 'uint256',
-      },
-    ],
-    name: 'approve',
-    outputs: [
-      {
-        internalType: 'bool',
-        name: '',
-        type: 'bool',
-      },
-    ],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'account',
-        type: 'address',
-      },
-    ],
-    name: 'balanceOf',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
     type: 'function',
   },
   {
@@ -395,26 +278,33 @@ export const ABI = [
       },
       {
         internalType: 'uint256',
-        name: '_tokenAmount',
+        name: '_baseVotingPower',
         type: 'uint256',
       },
     ],
-    name: 'burn',
+    name: 'addVoter',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
   },
   {
     inputs: [],
-    name: 'decimals',
+    name: 'currentWorkflowStatus',
     outputs: [
       {
-        internalType: 'uint8',
+        internalType: 'enum VoteAdministration.WorkflowStatus',
         name: '',
         type: 'uint8',
       },
     ],
     stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'endVotingSession',
+    outputs: [],
+    stateMutability: 'nonpayable',
     type: 'function',
   },
   {
@@ -425,6 +315,102 @@ export const ABI = [
         internalType: 'address[]',
         name: '',
         type: 'address[]',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_proposalId',
+        type: 'uint256',
+      },
+    ],
+    name: 'getProposal',
+    outputs: [
+      {
+        components: [
+          {
+            internalType: 'uint256',
+            name: 'proposalId',
+            type: 'uint256',
+          },
+          {
+            internalType: 'string',
+            name: 'title',
+            type: 'string',
+          },
+          {
+            internalType: 'string',
+            name: 'description',
+            type: 'string',
+          },
+          {
+            internalType: 'uint256',
+            name: 'voteCount',
+            type: 'uint256',
+          },
+          {
+            internalType: 'bool',
+            name: 'votingIsClosed',
+            type: 'bool',
+          },
+          {
+            internalType: 'bool',
+            name: 'isAccepted',
+            type: 'bool',
+          },
+        ],
+        internalType: 'struct VoteAdministration.Proposal',
+        name: '',
+        type: 'tuple',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'getProposals',
+    outputs: [
+      {
+        components: [
+          {
+            internalType: 'uint256',
+            name: 'proposalId',
+            type: 'uint256',
+          },
+          {
+            internalType: 'string',
+            name: 'title',
+            type: 'string',
+          },
+          {
+            internalType: 'string',
+            name: 'description',
+            type: 'string',
+          },
+          {
+            internalType: 'uint256',
+            name: 'voteCount',
+            type: 'uint256',
+          },
+          {
+            internalType: 'bool',
+            name: 'votingIsClosed',
+            type: 'bool',
+          },
+          {
+            internalType: 'bool',
+            name: 'isAccepted',
+            type: 'bool',
+          },
+        ],
+        internalType: 'struct VoteAdministration.Proposal[]',
+        name: '',
+        type: 'tuple[]',
       },
     ],
     stateMutability: 'view',
@@ -444,6 +430,61 @@ export const ABI = [
         internalType: 'bytes32',
         name: '',
         type: 'bytes32',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_voterAddress',
+        type: 'address',
+      },
+    ],
+    name: 'getVoter',
+    outputs: [
+      {
+        components: [
+          {
+            internalType: 'uint256',
+            name: 'voterId',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'baseVotingPower',
+            type: 'uint256',
+          },
+          {
+            internalType: 'address',
+            name: 'voterAddress',
+            type: 'address',
+          },
+        ],
+        internalType: 'struct VoteAdministration.Voter',
+        name: '',
+        type: 'tuple',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_addr',
+        type: 'address',
+      },
+    ],
+    name: 'getVoterTokenBalance',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
       },
     ],
     stateMutability: 'view',
@@ -508,28 +549,73 @@ export const ABI = [
     inputs: [
       {
         internalType: 'address',
-        name: '_voterAddress',
+        name: '_addr',
         type: 'address',
       },
+    ],
+    name: 'isVoter',
+    outputs: [
       {
-        internalType: 'uint256',
-        name: '_tokenAmount',
-        type: 'uint256',
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
       },
     ],
-    name: 'mint',
-    outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
-    name: 'name',
+    name: 'proposalCounter',
     outputs: [
       {
-        internalType: 'string',
+        internalType: 'uint256',
         name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    name: 'proposals',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: 'proposalId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'string',
+        name: 'title',
         type: 'string',
+      },
+      {
+        internalType: 'string',
+        name: 'description',
+        type: 'string',
+      },
+      {
+        internalType: 'uint256',
+        name: 'voteCount',
+        type: 'uint256',
+      },
+      {
+        internalType: 'bool',
+        name: 'votingIsClosed',
+        type: 'bool',
+      },
+      {
+        internalType: 'bool',
+        name: 'isAccepted',
+        type: 'bool',
       },
     ],
     stateMutability: 'view',
@@ -574,6 +660,33 @@ export const ABI = [
   {
     inputs: [
       {
+        internalType: 'uint256',
+        name: '_tokensPerNewVoter',
+        type: 'uint256',
+      },
+    ],
+    name: 'setTokensPerNewVoter',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'setUpVotingSession',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'startVotingSession',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
         internalType: 'bytes4',
         name: 'interfaceId',
         type: 'bytes4',
@@ -592,12 +705,12 @@ export const ABI = [
   },
   {
     inputs: [],
-    name: 'symbol',
+    name: 'tokenContract',
     outputs: [
       {
-        internalType: 'string',
+        internalType: 'contract HomeOwnerToken',
         name: '',
-        type: 'string',
+        type: 'address',
       },
     ],
     stateMutability: 'view',
@@ -605,7 +718,20 @@ export const ABI = [
   },
   {
     inputs: [],
-    name: 'totalSupply',
+    name: 'tokensPerNewVoter',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'voterCounter',
     outputs: [
       {
         internalType: 'uint256',
@@ -620,53 +746,29 @@ export const ABI = [
     inputs: [
       {
         internalType: 'address',
-        name: 'to',
+        name: '',
         type: 'address',
+      },
+    ],
+    name: 'voters',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: 'voterId',
+        type: 'uint256',
       },
       {
         internalType: 'uint256',
-        name: 'value',
+        name: 'baseVotingPower',
         type: 'uint256',
-      },
-    ],
-    name: 'transfer',
-    outputs: [
-      {
-        internalType: 'bool',
-        name: '',
-        type: 'bool',
-      },
-    ],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'from',
-        type: 'address',
       },
       {
         internalType: 'address',
-        name: 'to',
+        name: 'voterAddress',
         type: 'address',
       },
-      {
-        internalType: 'uint256',
-        name: 'value',
-        type: 'uint256',
-      },
     ],
-    name: 'transferFrom',
-    outputs: [
-      {
-        internalType: 'bool',
-        name: '',
-        type: 'bool',
-      },
-    ],
-    stateMutability: 'nonpayable',
+    stateMutability: 'view',
     type: 'function',
   },
 ];

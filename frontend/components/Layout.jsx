@@ -1,14 +1,25 @@
-"use client";
-import Header from "./Header";
+'use client';
 
-const Layout = ({ children }) => {
+import Header from './Header';
+import Workflows from './Workflows/Workflows';
+import Dashboard from './Dashboard/Dashboard';
+
+function Layout({ children }) {
   return (
-    <div className="w-full">
+    <div className="w-full h-full">
       <Header />
-      <section className="flex w-full px-24 gap-x-20"></section>
+      <div className="w-full h-full flex flex-col gap-6">
+        <div className="w-full">
+          <Workflows />
+        </div>
+        <div className="w-full h-full">
+          <Dashboard />
+        </div>
+      </div>
+
       <div className="">{children}</div>
     </div>
   );
-};
+}
 
 export default Layout;
