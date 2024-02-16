@@ -8,7 +8,6 @@ const getAdmins = async () => {
       abi: ABI,
       functionName: 'getAdmins',
     });
-    console.log(data);
     return data;
   } catch (err) {
     console.log('🔴 Error in getAdmins: ', err.message);

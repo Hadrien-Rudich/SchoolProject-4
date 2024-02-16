@@ -21,7 +21,7 @@ export function VotersContextProvider({ children }) {
     };
 
     fetchVoterDetails();
-  }, [address]);
+  }, [setVoter, address]);
 
   return (
     <VotersContext.Provider value={{ voter }}>

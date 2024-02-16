@@ -1,6 +1,6 @@
 function ProposalModal({ toggleModal, description, title, id }) {
   return (
-    <div className=" w-1/2 h-full absolute top-0 left-0 bg-blue-400 rounded-sm">
+    <div className="w-1/2 h-full absolute top-0 left-0 bg-blue-400 rounded-sm">
       <div className="w-full flex items-center justify-center gap-4">
         <p className="w-1/5 text-white">Proposal ID</p>
         <input

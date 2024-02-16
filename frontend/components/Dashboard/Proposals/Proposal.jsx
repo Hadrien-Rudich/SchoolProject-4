@@ -8,7 +8,7 @@ function Proposal({ id, title, description }) {
     setModalIsOpen(!modalIsOpen);
   };
   return (
-    <div className="h-16 flex items-center justify-center">
+    <div className="h-16 flex items-center justify-center ">
       {modalIsOpen && (
         <ProposalModal
           id={id}

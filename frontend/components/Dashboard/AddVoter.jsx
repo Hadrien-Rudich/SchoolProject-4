@@ -24,6 +24,7 @@ function AddVoter() {
       const data = await addVoter(inputAddress, inputBaseVotingPower);
       if (data.status === 'success') {
         setInputAddress('');
+        setInputBaseVotingPower('');
       }
     } catch (error) {
       console.error('Error during transaction:', error);

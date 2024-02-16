@@ -1,10 +1,13 @@
 /* eslint-disable react/jsx-no-constructed-context-values */
 import { createContext, useState, useEffect } from 'react';
+import { useAccount } from 'wagmi';
 import getAdmins from '../utils/getters/getAdmins';
 
 export const VoteAdminsContext = createContext();
 
 export function VoteAdminsContextProvider({ children }) {
+  const { address } = useAccount();
+
   const [voteAdmins, setVoteAdmins] = useState([]);
 
   useEffect(() => {
@@ -18,7 +21,7 @@ export function VoteAdminsContextProvider({ children }) {
     };
 
     fetchVoteAdmins();
-  }, []);
+  }, [setVoteAdmins, address]);
 
   return (
     <VoteAdminsContext.Provider value={{ voteAdmins }}>
