@@ -4,7 +4,7 @@ import fetchProposals from '../../../services/getProposals';
 import { ProposalsContext } from '../../../context/Proposals.context';
 
 function AddProposalModal({ toggleModal }) {
-  const { setProposalsArray } = useContext(ProposalsContext);
+  const { setProposalsArray, proposalsArray } = useContext(ProposalsContext);
   const [inputTitle, setInputTitle] = useState('');
   const [inputDescription, setInputDescription] = useState('');
 
@@ -40,7 +40,7 @@ function AddProposalModal({ toggleModal }) {
       }
     };
     fetchData();
-  }, [setProposalsArray]);
+  }, [setProposalsArray, proposalsArray]);
 
   return (
     <div className="absolute top-0 w-full bg-purple-500 rounded-sm">

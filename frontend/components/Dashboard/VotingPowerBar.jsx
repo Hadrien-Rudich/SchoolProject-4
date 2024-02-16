@@ -1,16 +1,17 @@
-import React, { useState } from 'react';
+/* eslint-disable no-nested-ternary */
+import { useContext } from 'react';
+import { VotingPowerContext } from '../../context/VotingPower.context';
 
 function ProgressBar() {
-  const [maxPower] = useState(10000);
-  const [power] = useState(10000);
+  const { currentVotingPower, maxVotingPower } = useContext(VotingPowerContext);
 
   // Calculate width percentage of the bar
-  const barWidth = `${(power / maxPower) * 100}%`;
+  const barWidth = `${(currentVotingPower / maxVotingPower) * 100}%`;
 
   const barColor =
-    power / maxPower > 0.7
+    currentVotingPower / maxVotingPower > 0.7
       ? 'bg-green-500'
-      : power / maxPower >= 0.3
+      : currentVotingPower / maxVotingPower >= 0.3
         ? 'bg-yellow-500'
         : 'bg-red-500';
 
@@ -23,7 +24,7 @@ function ProgressBar() {
         />
       </div>
       <p>
-        Power: {power} / {maxPower}
+        Voting Power: {currentVotingPower} / {maxVotingPower}
       </p>
     </div>
   );

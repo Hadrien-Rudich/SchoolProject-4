@@ -1,17 +1,21 @@
 /* eslint-disable react/jsx-no-constructed-context-values */
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useState, useEffect, useContext } from 'react';
 import { useAccount } from 'wagmi';
 import getVoter from '../utils/getters/getVoter';
+import { VoteAdminsContext } from './VoteAdmins.context';
 
 export const VotersContext = createContext();
 
 export function VotersContextProvider({ children }) {
+  const { voteAdmins } = useContext(VoteAdminsContext);
   const { address } = useAccount();
   const [voter, setVoter] = useState(null);
+  const [votingPower, setVotingPower] = useState(0);
 
   useEffect(() => {
     const fetchVoterDetails = async () => {
       if (!address) return;
+      if (voteAdmins.includes(address)) return;
       try {
         const voterDetails = await getVoter(address);
         setVoter(voterDetails);
@@ -21,7 +25,7 @@ export function VotersContextProvider({ children }) {
     };
 
     fetchVoterDetails();
-  }, [setVoter, address]);
+  }, [setVoter, address, voteAdmins]);
 
   return (
     <VotersContext.Provider value={{ voter }}>
