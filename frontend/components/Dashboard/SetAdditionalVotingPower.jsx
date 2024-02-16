@@ -2,9 +2,13 @@ import { useState, useContext } from 'react';
 import setTokens from '../../utils/VoteAdministration/0. VotingPowerAllocation/setTokens';
 import { VotingPowerContext } from '../../context/VotingPower.context';
 
-function SetTokens() {
+function SetAdditionalVotingPower() {
   const [input, setInput] = useState('');
-  const { maxVotingPower, setMaxVotingPower } = useContext(VotingPowerContext);
+  const {
+    additionalVotingPower,
+    setAdditionalVotingPower,
+    setCurrentVotingPower,
+  } = useContext(VotingPowerContext);
 
   const handleChange = (e) => {
     setInput(e.target.value);
@@ -14,9 +18,10 @@ function SetTokens() {
     e.preventDefault();
     try {
       const data = await setTokens(input);
-      setMaxVotingPower(input);
       if (data.status === 'success') {
         setInput('');
+        setAdditionalVotingPower(input);
+        setCurrentVotingPower(input);
       }
     } catch (error) {
       console.error('Error during transaction:', error);
@@ -52,14 +57,15 @@ function SetTokens() {
         </div>
       </form>
       <div className="h-full w-full flex items-center justify-center">
-        {maxVotingPower > 0 && (
-          <p className="text-2xl">
-            Current Additional Voting Power: {maxVotingPower}
-          </p>
+        {additionalVotingPower && (
+          <div className="flex flex-col items-center gap-4">
+            <p> Current Additional Voting Power:</p>
+            <p className="text-2xl text-green-400">{additionalVotingPower}</p>
+          </div>
         )}
       </div>
     </div>
   );
 }
 
-export default SetTokens;
+export default SetAdditionalVotingPower;

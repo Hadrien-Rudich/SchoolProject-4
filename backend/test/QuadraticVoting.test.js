@@ -129,7 +129,7 @@ describe("QuadraticVoting Contract Tests", function () {
       );
 
       await expect(
-        quadraticVoting.connect(addr2).castVote(0, 4)
+        quadraticVoting.connect(addr2).castVote(0, 11)
       ).to.be.revertedWithCustomError(quadraticVoting, "UserLacksVoterRole");
     });
 

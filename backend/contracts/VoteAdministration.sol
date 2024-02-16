@@ -9,7 +9,7 @@ contract VoteAdministration is AccessControl {
     HomeOwnerToken public tokenContract;
     uint256 public proposalCounter;
     uint256 public voterCounter;
-    uint256 public tokensPerNewVoter = 100;
+    uint256 private tokensPerNewVoter = 100;
 
     address[] private adminsArray;
 
@@ -187,6 +187,10 @@ contract VoteAdministration is AccessControl {
 
      function getProposals() external view returns (Proposal[] memory) {
         return proposalsArray;
+    }
+
+      function getTokensPerNewVoter() external view returns (uint256) {
+        return tokensPerNewVoter;
     }
     
 }

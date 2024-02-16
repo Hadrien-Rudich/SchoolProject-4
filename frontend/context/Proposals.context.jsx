@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-no-constructed-context-values */
 import { createContext, useState, useEffect } from 'react';
-import fetchProposals from '../services/getProposals';
+import fetchProposals from '../services/fetchProposals';
 
 export const ProposalsContext = createContext();
 

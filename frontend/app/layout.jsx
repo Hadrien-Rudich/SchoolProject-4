@@ -40,13 +40,13 @@ export default function RootLayout({ children }) {
             <HomeOwnerTokenAdminsContextProvider>
               <WorkflowContextProvider>
                 <VoteAdminsContextProvider>
-                  <ProposalsContextProvider>
-                    <VotersContextProvider>
-                      <VotingPowerContextProvider>
+                  <VotingPowerContextProvider>
+                    <ProposalsContextProvider>
+                      <VotersContextProvider>
                         <UserContextProvider>{children}</UserContextProvider>
-                      </VotingPowerContextProvider>
-                    </VotersContextProvider>
-                  </ProposalsContextProvider>
+                      </VotersContextProvider>
+                    </ProposalsContextProvider>
+                  </VotingPowerContextProvider>
                 </VoteAdminsContextProvider>
               </WorkflowContextProvider>
             </HomeOwnerTokenAdminsContextProvider>
