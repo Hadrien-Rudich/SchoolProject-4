@@ -1,6 +1,6 @@
 import { useState, useContext } from 'react';
-import setTokens from '../../utils/VoteAdministration/0. VotingPowerAllocation/setTokens';
-import { VotingPowerContext } from '../../context/VotingPower.context';
+import setTokens from '../../../utils/VoteAdministration/0. VotingPowerAllocation/setTokens';
+import { VotingPowerContext } from '../../../context/VotingPower.context';
 
 function SetAdditionalVotingPower() {
   const [input, setInput] = useState('');
@@ -29,11 +29,11 @@ function SetAdditionalVotingPower() {
   };
 
   return (
-    <div className="w-full flex flex-col divide-y-4 divide-black ">
+    <div className="w-full h-full flex flex-col divide-y-4 divide-black ">
       <form
         action="submit"
         onSubmit={handleSubmit}
-        className="flex flex-col  gap-y-3 p-5 text-indigo-200"
+        className="flex flex-col my-10 gap-y-3 p-5 text-indigo-200"
       >
         <div className="w-full flex gap-4 justify-center items-center">
           <p className=" text-white">Additional Voting Power</p>
@@ -56,9 +56,9 @@ function SetAdditionalVotingPower() {
           </button>
         </div>
       </form>
-      <div className="h-full w-full flex items-center justify-center">
+      <div className="flex items-center justify-center">
         {additionalVotingPower && (
-          <div className="flex flex-col items-center gap-4">
+          <div className="my-10 flex flex-col items-center justify-center gap-4">
             <p> Current Additional Voting Power:</p>
             <p className="text-2xl text-green-400">{additionalVotingPower}</p>
           </div>

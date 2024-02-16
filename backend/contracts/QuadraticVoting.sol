@@ -29,13 +29,13 @@ contract QuadraticVoting is AccessControl {
 
     mapping(address => mapping(uint256 => VoteDetail)) public voteDetails;
 
-    event VoteCast(address indexed voter, uint256 indexed proposalId, uint256 additionalVotingPower);
+    event VoteCast(address indexed voter, uint256 indexed proposalId, string voteDecision, uint256 additionalVotingPower);
 
     error UserLacksVoterRole();
     error VoterLacksCredits();
     error AddressAlreadyAdmin();
 
-    function castVote(uint256 proposalId, uint256 additionalVotingPower) public {
+    function castVote(uint256 proposalId, string calldata voteDecision, uint256 additionalVotingPower) public {
         if (!voteAdminContract.hasRole(voteAdminContract.VOTER_ROLE(), msg.sender)) {
                   revert UserLacksVoterRole();
                   } 
@@ -46,7 +46,7 @@ contract QuadraticVoting is AccessControl {
         }
 
         tokenContract.burn(msg.sender, additionalVotingPower** 2);
-        emit VoteCast(msg.sender, proposalId, additionalVotingPower);
+        emit VoteCast(msg.sender, proposalId, voteDecision, additionalVotingPower);
 
     }
 

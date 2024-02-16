@@ -18,7 +18,7 @@ function Proposal({ id, title, description }) {
         />
       )}
       <button
-        type="submit"
+        type="button"
         onClick={toggleModal}
         className={`${modalIsOpen ? 'text-blue-400 border-blue-400 hover:bg-blue-950' : 'text-yellow-400 border-yellow-400 hover:bg-yellow-950'} w-2/3 border-2 tracking-wide font-semibold  self-center p-1 rounded-md hover:translate-y-1 truncate `}
       >

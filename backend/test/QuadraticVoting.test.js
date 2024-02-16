@@ -129,7 +129,7 @@ describe("QuadraticVoting Contract Tests", function () {
       );
 
       await expect(
-        quadraticVoting.connect(addr2).castVote(0, 11)
+        quadraticVoting.connect(addr2).castVote(0, "yes", 11)
       ).to.be.revertedWithCustomError(quadraticVoting, "UserLacksVoterRole");
     });
 
@@ -146,7 +146,7 @@ describe("QuadraticVoting Contract Tests", function () {
       await voteAdministration.connect(addr3).addVoter(addr2.address, 100);
 
       await expect(
-        quadraticVoting.connect(addr2).castVote(0, 11)
+        quadraticVoting.connect(addr2).castVote(0, "no", 11)
       ).to.be.revertedWithCustomError(quadraticVoting, "VoterLacksCredits");
     });
 
@@ -168,7 +168,7 @@ describe("QuadraticVoting Contract Tests", function () {
 
       expect(initialAddr2TokenBalance).to.be.eq(100);
 
-      await quadraticVoting.connect(addr2).castVote(0, 9);
+      await quadraticVoting.connect(addr2).castVote(0, "yes", 9);
       const addr2TokenBalanceAfterVote = await voteAdministration
         .connect(addr3)
         .getVoterTokenBalance(addr2.address);
@@ -187,9 +187,9 @@ describe("QuadraticVoting Contract Tests", function () {
 
       await voteAdministration.connect(addr3).addVoter(addr2.address, 100);
 
-      await expect(quadraticVoting.connect(addr2).castVote(0, 9))
+      await expect(quadraticVoting.connect(addr2).castVote(0, "yes", 9))
         .to.emit(quadraticVoting, "VoteCast")
-        .withArgs(addr2.address, 0, 9);
+        .withArgs(addr2.address, 0, "yes", 9);
     });
   });
   describe("grantAdminRole", function () {

@@ -1,7 +1,10 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import addProposal from '../../../utils/VoteAdministration/1. SetUpVote/addProposal';
+import fetchProposals from '../../../services/fetchProposals';
+import { ProposalsContext } from '../../../context/Proposals.context';
 
 function AddProposalModal({ toggleModal }) {
+  const { setProposalsArray } = useContext(ProposalsContext);
   const [inputTitle, setInputTitle] = useState('');
   const [inputDescription, setInputDescription] = useState('');
 
@@ -21,6 +24,8 @@ function AddProposalModal({ toggleModal }) {
         setInputTitle('');
         setInputDescription('');
         toggleModal();
+        const fetchedProposals = await fetchProposals();
+        setProposalsArray(fetchedProposals);
       }
     } catch (error) {
       console.error('Error during transaction:', error);
@@ -58,13 +63,13 @@ function AddProposalModal({ toggleModal }) {
             <button
               type="button"
               onClick={toggleModal}
-              className="w-1/3 text-red-500 border-2 tracking-wide font-semibold self-center p-2 rounded-md border-red-500 hover:bg-red-950 hover:translate-y-1"
+              className="w-fit text-red-500 border-2 tracking-wide font-semibold self-center p-2 rounded-md border-red-500 hover:bg-red-950 hover:translate-y-1"
             >
               Close Proposal
             </button>
             <button
               type="submit"
-              className="w-1/3 text-green-400 border-2 tracking-wide font-semibold self-center p-2 rounded-md border-green-400 hover:bg-green-950 hover:translate-y-1"
+              className="w-fit text-green-400 border-2 tracking-wide font-semibold self-center p-2 rounded-md border-green-400 hover:bg-green-950 hover:translate-y-1"
             >
               Add Proposal
             </button>
