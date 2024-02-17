@@ -330,4 +330,76 @@ describe("QuadraticVoting Contract Tests", function () {
       expect(adminsArray).to.eql([owner.address, addr2.address, addr4.address]);
     });
   });
+  describe("getVoteSummary", function () {
+    it("Should NOT be available to roles other than DEFAULT_ADMIN_ROLE", async function () {
+      const {
+        quadraticVoting,
+        voteAdministration,
+        addr2,
+        addr3,
+        DEFAULT_ADMIN_ROLE,
+      } = await loadFixture(deployQuadraticVotingWithBURNER_ROLE);
+
+      await voteAdministration.connect(addr3).setUpVotingSession();
+
+      await voteAdministration
+        .connect(addr3)
+        .addProposal("Test Title 1", "Test Description 1");
+
+      await voteAdministration.connect(addr3).addVoter(addr2.address, 100);
+
+      await quadraticVoting.connect(addr2).castVote(1, true, 9);
+
+      await expect(quadraticVoting.connect(addr3).getVoteSummary(1))
+        .to.be.revertedWithCustomError(
+          quadraticVoting,
+          "AccessControlUnauthorizedAccount"
+        )
+        .withArgs(addr3.address, DEFAULT_ADMIN_ROLE);
+    });
+    it("Should NOT accept a proposalId that does not exist", async function () {
+      const { quadraticVoting, voteAdministration, addr2, addr3 } =
+        await loadFixture(deployQuadraticVotingWithBURNER_ROLE);
+
+      await voteAdministration.connect(addr3).setUpVotingSession();
+
+      await voteAdministration
+        .connect(addr3)
+        .addProposal("Test Title 1", "Test Description 1");
+
+      await voteAdministration.connect(addr3).addVoter(addr2.address, 100);
+
+      await quadraticVoting.connect(addr2).castVote(1, true, 9);
+
+      await expect(
+        quadraticVoting.connect(addr2).getVoteSummary(4)
+      ).to.be.revertedWithCustomError(quadraticVoting, "ProposalDoesNotExist");
+    });
+    it("Should correctly tally votes for a proposal", async function () {
+      const { quadraticVoting, voteAdministration, addr2, addr3 } =
+        await loadFixture(deployQuadraticVotingWithBURNER_ROLE);
+
+      await voteAdministration
+        .connect(addr3)
+        .grantAdminRole(quadraticVoting.target);
+
+      await voteAdministration.connect(addr3).setUpVotingSession();
+      await voteAdministration
+        .connect(addr3)
+        .addProposal("Test Title 1", "Test Description 1");
+      await voteAdministration.connect(addr3).addVoter(addr2.address, 100);
+      await voteAdministration.connect(addr3).addVoter(addr3.address, 100);
+
+      await quadraticVoting.connect(addr2).castVote(1, true, 10);
+      await quadraticVoting.connect(addr3).castVote(1, false, 5);
+
+      const summary = await quadraticVoting.connect(addr2).getVoteSummary(1);
+
+      const expectedVotesFor = 100 + 10 ** 2;
+      const expectedVotesAgainst = 100 + 5 ** 2;
+
+      expect(summary.totalVotesFor).to.equal(expectedVotesFor);
+      expect(summary.totalVotesAgainst).to.equal(expectedVotesAgainst);
+    });
+  });
 });

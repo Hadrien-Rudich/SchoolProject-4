@@ -5,6 +5,7 @@ import { VoteAdminsContext } from '../../context/VoteAdmins.context';
 import VotingPowerAllocationDashboard from './1. VotingPowerAllocation/VotingPowerAllocationDashboard';
 import SetUpVoteDashboard from './2. SetUpVoteDashboard/SetUpVoteDashboard';
 import StartVoteDashboard from './3. StartVoteDashboard/StartVoteDashboard';
+import EndVoteDashboard from './4. EndVoteDashboard/EndVoteDashboard';
 
 function Dashboard() {
   const { address } = useAccount();
@@ -24,6 +25,7 @@ function Dashboard() {
         )}
 
         {currentWorkflow === 3 && <StartVoteDashboard />}
+        {currentWorkflow === 4 && <EndVoteDashboard />}
       </div>
     </div>
   );

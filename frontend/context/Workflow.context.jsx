@@ -30,7 +30,6 @@ export function WorkflowContextProvider({ children }) {
       label: 'End Vote',
       method: endVote,
     },
-    { id: 4, label: 'Vote Summary' },
   ]);
 
   const [currentWorkflow, setCurrentWorkflow] = useState(1);

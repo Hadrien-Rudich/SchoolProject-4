@@ -26,6 +26,7 @@ async function main() {
   await QuadraticVoting.waitForDeployment();
 
   await HomeOwnerToken.addMinterBurner(QuadraticVoting.target);
+  await VoteAdministration.grantAdminRole(QuadraticVoting.target);
 
   console.log(
     `HomeOwnerToken deployed to: ${HomeOwnerToken.target}, 

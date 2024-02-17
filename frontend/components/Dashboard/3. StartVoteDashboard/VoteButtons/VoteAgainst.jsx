@@ -4,7 +4,7 @@ import castVote from '../../../../utils/QuadraticVoting/castVote';
 
 function VoteAgainst({ id, voteIntent, setVoteIntent }) {
   const { fetchVotingPower } = useContext(VotingPowerContext);
-  const [votingPowerRequired, setVotingPowerRequired] = useState(1);
+  const [, setVotingPowerRequired] = useState(1);
 
   useEffect(() => {
     setVotingPowerRequired(voteIntent ** 2);
