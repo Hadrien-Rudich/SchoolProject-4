@@ -2,7 +2,7 @@ import {
   useState,
   // useContext
 } from 'react';
-import addVoter from '../../utils/VoteAdministration/1. SetUpVote/addVoter';
+import addVoter from '../../../utils/VoteAdministration/1. SetUpVote/addVoter';
 
 function AddVoter() {
   const [inputAddress, setInputAddress] = useState('');
@@ -62,7 +62,7 @@ function AddVoter() {
           <button
             type="submit"
             onClick={handleSubmit}
-            className="w-1/3 text-green-400 border-2 tracking-wide font-semibold  self-center p-2 rounded-md border-green-400 hover:bg-green-950 hover:translate-y-1"
+            className="w-fit text-green-400 border-2 tracking-wide font-semibold  self-center p-2 rounded-md border-green-400 hover:bg-green-950 hover:translate-y-1"
           >
             Add Voter
           </button>

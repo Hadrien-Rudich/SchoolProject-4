@@ -347,21 +347,6 @@ export const ABI = [
             name: 'description',
             type: 'string',
           },
-          {
-            internalType: 'uint256',
-            name: 'voteCount',
-            type: 'uint256',
-          },
-          {
-            internalType: 'bool',
-            name: 'votingIsClosed',
-            type: 'bool',
-          },
-          {
-            internalType: 'bool',
-            name: 'isAccepted',
-            type: 'bool',
-          },
         ],
         internalType: 'struct VoteAdministration.Proposal',
         name: '',
@@ -392,21 +377,6 @@ export const ABI = [
             name: 'description',
             type: 'string',
           },
-          {
-            internalType: 'uint256',
-            name: 'voteCount',
-            type: 'uint256',
-          },
-          {
-            internalType: 'bool',
-            name: 'votingIsClosed',
-            type: 'bool',
-          },
-          {
-            internalType: 'bool',
-            name: 'isAccepted',
-            type: 'bool',
-          },
         ],
         internalType: 'struct VoteAdministration.Proposal[]',
         name: '',
@@ -430,6 +400,19 @@ export const ABI = [
         internalType: 'bytes32',
         name: '',
         type: 'bytes32',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'getTokensPerNewVoter',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
       },
     ],
     stateMutability: 'view',
@@ -581,6 +564,25 @@ export const ABI = [
     inputs: [
       {
         internalType: 'uint256',
+        name: '_proposalId',
+        type: 'uint256',
+      },
+    ],
+    name: 'proposalExists',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
         name: '',
         type: 'uint256',
       },
@@ -601,21 +603,6 @@ export const ABI = [
         internalType: 'string',
         name: 'description',
         type: 'string',
-      },
-      {
-        internalType: 'uint256',
-        name: 'voteCount',
-        type: 'uint256',
-      },
-      {
-        internalType: 'bool',
-        name: 'votingIsClosed',
-        type: 'bool',
-      },
-      {
-        internalType: 'bool',
-        name: 'isAccepted',
-        type: 'bool',
       },
     ],
     stateMutability: 'view',
@@ -711,19 +698,6 @@ export const ABI = [
         internalType: 'contract HomeOwnerToken',
         name: '',
         type: 'address',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'tokensPerNewVoter',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
       },
     ],
     stateMutability: 'view',

@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-no-constructed-context-values */
 import { createContext, useState, useEffect } from 'react';
-import { getAdmins } from '../utils/HomeTokenContract/getAdmins';
+import getAdmins from '../utils/HomeTokenContract/getAdmins';
 
 export const HomeOwnerTokenAdminsContext = createContext();
 

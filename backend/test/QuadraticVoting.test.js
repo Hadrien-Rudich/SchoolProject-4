@@ -129,11 +129,11 @@ describe("QuadraticVoting Contract Tests", function () {
       );
 
       await expect(
-        quadraticVoting.connect(addr2).castVote(0, 4)
+        quadraticVoting.connect(addr2).castVote(0, true, 11)
       ).to.be.revertedWithCustomError(quadraticVoting, "UserLacksVoterRole");
     });
 
-    it("Should NOT allow a vote with insufficient voting power left", async function () {
+    it("Should NOT allow a vote to a proposalId that does not exist", async function () {
       const { quadraticVoting, voteAdministration, addr2, addr3 } =
         await loadFixture(deployQuadraticVotingWithBURNER_ROLE);
 
@@ -146,8 +146,92 @@ describe("QuadraticVoting Contract Tests", function () {
       await voteAdministration.connect(addr3).addVoter(addr2.address, 100);
 
       await expect(
-        quadraticVoting.connect(addr2).castVote(0, 11)
+        quadraticVoting.connect(addr2).castVote(4, true, 11)
+      ).to.be.revertedWithCustomError(quadraticVoting, "ProposalDoesNotExist");
+    });
+
+    it("Should NOT allow a voter to vote more than once for the same proposalId", async function () {
+      const { quadraticVoting, voteAdministration, addr2, addr3 } =
+        await loadFixture(deployQuadraticVotingWithBURNER_ROLE);
+
+      await voteAdministration.connect(addr3).setUpVotingSession();
+
+      await voteAdministration
+        .connect(addr3)
+        .addProposal("Test Title 1", "Test Description 1");
+
+      await voteAdministration.connect(addr3).addVoter(addr2.address, 100);
+
+      await quadraticVoting.connect(addr2).castVote(1, true, 9);
+
+      await expect(
+        quadraticVoting.connect(addr2).castVote(1, true, 9)
+      ).to.be.revertedWithCustomError(quadraticVoting, "VoterHasAlreadyVoted");
+    });
+
+    it("Should NOT allow a vote exceeding additionalVotingPower", async function () {
+      const { quadraticVoting, voteAdministration, addr2, addr3 } =
+        await loadFixture(deployQuadraticVotingWithBURNER_ROLE);
+
+      await voteAdministration.connect(addr3).setUpVotingSession();
+
+      await voteAdministration
+        .connect(addr3)
+        .addProposal("Test Title 1", "Test Description 1");
+
+      await voteAdministration.connect(addr3).addVoter(addr2.address, 100);
+
+      await expect(
+        quadraticVoting.connect(addr2).castVote(1, false, 11)
       ).to.be.revertedWithCustomError(quadraticVoting, "VoterLacksCredits");
+    });
+
+    it("Should properly tally a totalVotingPower (baseVotingPower + additionalVotingPower)", async function () {
+      const { voteAdministration, addr2, addr3 } = await loadFixture(
+        deployQuadraticVotingWithBURNER_ROLE
+      );
+
+      const baseVotingPower = 350;
+      const additionalVotingPower = 100;
+      await voteAdministration
+        .connect(addr3)
+        .setTokensPerNewVoter(additionalVotingPower);
+
+      await voteAdministration.connect(addr3).setUpVotingSession();
+
+      await voteAdministration
+        .connect(addr3)
+        .addVoter(addr2.address, baseVotingPower);
+
+      const voter = await voteAdministration.getVoter(addr2.address);
+      const voterAdditionalVotingPower =
+        await voteAdministration.getVoterTokenBalance(addr2.address);
+
+      const totalVotingPower =
+        Number(voter.baseVotingPower) + Number(voterAdditionalVotingPower);
+      expect(totalVotingPower).to.equal(
+        baseVotingPower + additionalVotingPower
+      );
+    });
+
+    it("Should properly register votesFor and votesAgainst", async function () {
+      const { voteAdministration, addr2, addr3 } = await loadFixture(
+        deployQuadraticVotingWithBURNER_ROLE
+      );
+
+      const baseVotingPower = 350;
+
+      await voteAdministration.connect(addr3).setUpVotingSession();
+
+      await voteAdministration
+        .connect(addr3)
+        .addVoter(addr2.address, baseVotingPower);
+
+      const voter = await voteAdministration
+        .connect(addr3)
+        .getVoter(addr2.address);
+
+      expect(voter.baseVotingPower).to.equal(baseVotingPower);
     });
 
     it("Should burn the requested amount of HomeOwnerTokens", async function () {
@@ -168,7 +252,7 @@ describe("QuadraticVoting Contract Tests", function () {
 
       expect(initialAddr2TokenBalance).to.be.eq(100);
 
-      await quadraticVoting.connect(addr2).castVote(0, 9);
+      await quadraticVoting.connect(addr2).castVote(1, true, 9);
       const addr2TokenBalanceAfterVote = await voteAdministration
         .connect(addr3)
         .getVoterTokenBalance(addr2.address);
@@ -187,9 +271,9 @@ describe("QuadraticVoting Contract Tests", function () {
 
       await voteAdministration.connect(addr3).addVoter(addr2.address, 100);
 
-      await expect(quadraticVoting.connect(addr2).castVote(0, 9))
+      await expect(quadraticVoting.connect(addr2).castVote(1, true, 9))
         .to.emit(quadraticVoting, "VoteCast")
-        .withArgs(addr2.address, 0, 9);
+        .withArgs(addr2.address, 1, true, 9);
     });
   });
   describe("grantAdminRole", function () {

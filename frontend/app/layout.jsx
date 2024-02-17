@@ -7,11 +7,12 @@ import { configureChains, createConfig, WagmiConfig } from 'wagmi';
 import { hardhat, sepolia } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
 import { UserContextProvider } from '../context/User.context';
-import { HomeOwnerTokenAdminsContextProvider } from '../context/HomeOwnerTokenAdmins.context';
+import { HomeOwnerTokenAdminsContextProvider } from '../context/HomeOwnerTokenAdmins.Context';
 import { VoteAdminsContextProvider } from '../context/VoteAdmins.context';
 import { WorkflowContextProvider } from '../context/Workflow.context';
 import { ProposalsContextProvider } from '../context/Proposals.context';
 import { VotersContextProvider } from '../context/Voters.context';
+import { VotingPowerContextProvider } from '../context/VotingPower.context';
 
 const { chains, publicClient } = configureChains(
   [hardhat, sepolia],
@@ -39,11 +40,13 @@ export default function RootLayout({ children }) {
             <HomeOwnerTokenAdminsContextProvider>
               <WorkflowContextProvider>
                 <VoteAdminsContextProvider>
-                  <ProposalsContextProvider>
-                    <VotersContextProvider>
-                      <UserContextProvider>{children}</UserContextProvider>
-                    </VotersContextProvider>
-                  </ProposalsContextProvider>
+                  <VotingPowerContextProvider>
+                    <ProposalsContextProvider>
+                      <VotersContextProvider>
+                        <UserContextProvider>{children}</UserContextProvider>
+                      </VotersContextProvider>
+                    </ProposalsContextProvider>
+                  </VotingPowerContextProvider>
                 </VoteAdminsContextProvider>
               </WorkflowContextProvider>
             </HomeOwnerTokenAdminsContextProvider>

@@ -31,7 +31,7 @@ function ProposalModal({ toggleModal, description, title, id }) {
           <button
             type="button"
             onClick={toggleModal}
-            className="w-1/3 text-red-500 border-2 tracking-wide font-semibold self-center p-2 rounded-md border-red-500 hover:bg-red-950 hover:translate-y-1"
+            className="w-fit text-red-500 border-2 tracking-wide font-semibold self-center p-2 rounded-md border-red-500 hover:bg-red-950 hover:translate-y-1"
           >
             Close Proposal
           </button>
