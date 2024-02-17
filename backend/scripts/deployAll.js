@@ -17,8 +17,20 @@ async function main() {
   await VoteAdministration.waitForDeployment();
   await HomeOwnerToken.addMinterBurner(VoteAdministration.target);
 
+  const QuadraticVoting = await hre.ethers.deployContract("QuadraticVoting", [
+    HomeOwnerToken.target,
+    VoteAdministration.target,
+    signers[0].address,
+  ]);
+
+  await QuadraticVoting.waitForDeployment();
+
+  await HomeOwnerToken.addMinterBurner(QuadraticVoting.target);
+
   console.log(
-    `HomeOwnerToken deployed to: ${HomeOwnerToken.target}, VoteAdministration contract deployed to: ${VoteAdministration.target}`
+    `HomeOwnerToken deployed to: ${HomeOwnerToken.target}, 
+    VoteAdministration contract deployed to: ${VoteAdministration.target},
+    QuadraticVoting contract deployed to: ${QuadraticVoting.target}`
   );
 }
 

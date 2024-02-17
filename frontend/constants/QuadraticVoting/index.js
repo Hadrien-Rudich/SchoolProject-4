@@ -1,4 +1,4 @@
-export const contractAddress = '0x9fe46736679d2d9a65f0992f2272de9f3c7fa6e0';
+export const contractAddress = '0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9';
 
 export const ABI = [
   {
@@ -55,7 +55,17 @@ export const ABI = [
   },
   {
     inputs: [],
+    name: 'ProposalDoesNotExist',
+    type: 'error',
+  },
+  {
+    inputs: [],
     name: 'UserLacksVoterRole',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'VoterHasAlreadyVoted',
     type: 'error',
   },
   {
@@ -155,6 +165,12 @@ export const ABI = [
       },
       {
         indexed: false,
+        internalType: 'bool',
+        name: 'voteDecision',
+        type: 'bool',
+      },
+      {
+        indexed: false,
         internalType: 'uint256',
         name: 'additionalVotingPower',
         type: 'uint256',
@@ -195,6 +211,11 @@ export const ABI = [
         internalType: 'uint256',
         name: 'proposalId',
         type: 'uint256',
+      },
+      {
+        internalType: 'bool',
+        name: 'voteDecision',
+        type: 'bool',
       },
       {
         internalType: 'uint256',

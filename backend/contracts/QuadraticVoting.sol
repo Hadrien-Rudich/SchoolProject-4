@@ -12,56 +12,101 @@ contract QuadraticVoting is AccessControl {
 
     address[] private adminsArray;
 
-    
-    constructor(address _tokenContractAddress, address _voteAdminContractAddress, address _initialAdmin) {
+    constructor(
+        address _tokenContractAddress,
+        address _voteAdminContractAddress,
+        address _initialAdmin
+    ) {
         tokenContract = HomeOwnerToken(_tokenContractAddress);
         voteAdminContract = VoteAdministration(_voteAdminContractAddress);
         _grantRole(DEFAULT_ADMIN_ROLE, _initialAdmin);
         adminsArray.push(_initialAdmin);
     }
 
-    // Struct to hold vote details - could be expanded as needed
     struct VoteDetail {
         uint256 votesAgainst;
         uint256 votesFor;
-        
     }
 
     mapping(address => mapping(uint256 => VoteDetail)) public voteDetails;
 
-    event VoteCast(address indexed voter, uint256 indexed proposalId, string voteDecision, uint256 additionalVotingPower);
+    event VoteCast(
+        address indexed voter,
+        uint256 indexed proposalId,
+        bool voteDecision,
+        uint256 additionalVotingPower
+    );
 
     error UserLacksVoterRole();
     error VoterLacksCredits();
     error AddressAlreadyAdmin();
+    error ProposalDoesNotExist();
+    error VoterHasAlreadyVoted();
 
-    function castVote(uint256 proposalId, string calldata voteDecision, uint256 additionalVotingPower) public {
-        if (!voteAdminContract.hasRole(voteAdminContract.VOTER_ROLE(), msg.sender)) {
-                  revert UserLacksVoterRole();
-                  } 
+    function castVote(
+        uint256 proposalId,
+        bool voteDecision,
+        uint256 additionalVotingPower
+    ) public {
+        if (
+            !voteAdminContract.hasRole(
+                voteAdminContract.VOTER_ROLE(),
+                msg.sender
+            )
+        ) {
+            revert UserLacksVoterRole();
+        }
 
-        uint256 votingPower = voteAdminContract.getVoterTokenBalance(msg.sender);
-        if (votingPower < additionalVotingPower** 2) {
+        if (!voteAdminContract.proposalExists(proposalId)) {
+            revert ProposalDoesNotExist();
+        }
+
+        VoteDetail storage detail = voteDetails[msg.sender][proposalId];
+        if (detail.votesFor > 0 || detail.votesAgainst > 0) {
+            revert VoterHasAlreadyVoted();
+        }
+
+        uint256 requiredTokens = additionalVotingPower ** 2;
+
+        uint256 availableTokens = tokenContract.balanceOf(msg.sender);
+        if (availableTokens < requiredTokens) {
             revert VoterLacksCredits();
         }
 
-        tokenContract.burn(msg.sender, additionalVotingPower** 2);
-        emit VoteCast(msg.sender, proposalId, voteDecision, additionalVotingPower);
+        uint256 baseVotingPower = voteAdminContract
+            .getVoter(msg.sender)
+            .baseVotingPower;
+        uint256 totalVotingPower = baseVotingPower + additionalVotingPower;
 
+        //to be tested
+        if (voteDecision) {
+            voteDetails[msg.sender][proposalId].votesFor += totalVotingPower;
+        } else {
+            voteDetails[msg.sender][proposalId]
+                .votesAgainst += totalVotingPower;
+        }
+
+        tokenContract.burn(msg.sender, requiredTokens);
+
+        emit VoteCast(
+            msg.sender,
+            proposalId,
+            voteDecision,
+            additionalVotingPower
+        );
     }
 
-   function grantAdminRole(address _adminAddress) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function grantAdminRole(
+        address _adminAddress
+    ) external onlyRole(DEFAULT_ADMIN_ROLE) {
         if (hasRole(DEFAULT_ADMIN_ROLE, _adminAddress)) {
-                revert AddressAlreadyAdmin();
-                }           
+            revert AddressAlreadyAdmin();
+        }
         _grantRole(DEFAULT_ADMIN_ROLE, _adminAddress);
         adminsArray.push(_adminAddress);
-
     }
 
-      function getAdmins() external view returns (address[] memory) {
+    function getAdmins() external view returns (address[] memory) {
         return adminsArray;
     }
-   
 }
-

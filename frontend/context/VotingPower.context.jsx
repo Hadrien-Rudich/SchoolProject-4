@@ -1,25 +1,35 @@
 /* eslint-disable react/jsx-no-constructed-context-values */
-import { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useCallback } from 'react';
+import { useAccount } from 'wagmi';
 import fetchTokensPerNewVoter from '../services/fetchTokensPerNewVoter';
+import fetchVoterAdditionalPower from '../services/fetchVoterAdditionalPower';
 
 export const VotingPowerContext = createContext();
 
-export function VotingPowerContextProvider({ children }) {
+function VotingPowerUpdater({ children }) {
+  const { address, isConnected } = useAccount();
   const [additionalVotingPower, setAdditionalVotingPower] = useState(0);
   const [currentVotingPower, setCurrentVotingPower] = useState(0);
 
-  useEffect(() => {
-    const fetchData = async () => {
+  // Define the fetchData function using useCallback to memoize it
+  const fetchVotingPower = useCallback(async () => {
+    if (isConnected && address) {
       try {
-        const data = await fetchTokensPerNewVoter();
-        setAdditionalVotingPower(Number(data));
-        setCurrentVotingPower(Number(data));
+        const tokensPerNewVoter = await fetchTokensPerNewVoter();
+        const remainingTokens = await fetchVoterAdditionalPower(address);
+
+        setAdditionalVotingPower(Number(tokensPerNewVoter));
+        setCurrentVotingPower(Number(remainingTokens));
       } catch (error) {
-        console.error('Error fetching proposals:', error);
+        console.error('Error fetching voting power:', error);
       }
-    };
-    fetchData();
-  }, []);
+    }
+  }, [address, isConnected]);
+
+  // Trigger fetchData on component mount and when address or isConnected changes
+  useEffect(() => {
+    fetchVotingPower();
+  }, [fetchVotingPower]);
 
   return (
     <VotingPowerContext.Provider
@@ -28,9 +38,14 @@ export function VotingPowerContextProvider({ children }) {
         setAdditionalVotingPower,
         currentVotingPower,
         setCurrentVotingPower,
+        fetchVotingPower,
       }}
     >
       {children}
     </VotingPowerContext.Provider>
   );
+}
+
+export function VotingPowerContextProvider({ children }) {
+  return <VotingPowerUpdater>{children}</VotingPowerUpdater>;
 }

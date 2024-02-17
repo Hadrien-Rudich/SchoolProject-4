@@ -335,9 +335,6 @@ describe("VoteAdministration Contract Tests", function () {
       expect(proposal.proposalId).to.equal(proposalIndex);
       expect(proposal.title).to.equal(title);
       expect(proposal.description).to.equal(description);
-      expect(proposal.voteCount.toString()).to.equal("0");
-      expect(proposal.votingIsClosed).to.equal(false);
-      expect(proposal.isAccepted).to.equal(false);
     });
 
     it("Should emit a broadcast at proposal addition", async function () {
@@ -730,12 +727,30 @@ describe("VoteAdministration Contract Tests", function () {
 
       const proposalsArray = await voteAdministration.getProposals();
       expect(proposalsArray).to.eql([
-        [1n, "Title1", "Description1", 0n, false, false],
+        [1n, "Title1", "Description1"],
 
-        [2n, "Title2", "Description2", 0n, false, false],
+        [2n, "Title2", "Description2"],
 
-        [3n, "Title3", "Description3", 0n, false, false],
+        [3n, "Title3", "Description3"],
       ]);
+    });
+  });
+
+  describe("proposalExists", function () {
+    it("Should return true if a proposal exists", async function () {
+      const { voteAdministration, owner } = await loadFixture(
+        deployVoteAdministration
+      );
+
+      await voteAdministration.connect(owner).setUpVotingSession();
+
+      await voteAdministration
+        .connect(owner)
+        .addProposal("Title", "Description");
+
+      const doesProposalExist = await voteAdministration.proposalExists(1);
+
+      expect(doesProposalExist).to.be.eq(true);
     });
   });
   describe("getTokensPerNewVoter", function () {

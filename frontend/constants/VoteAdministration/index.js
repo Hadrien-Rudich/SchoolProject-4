@@ -347,21 +347,6 @@ export const ABI = [
             name: 'description',
             type: 'string',
           },
-          {
-            internalType: 'uint256',
-            name: 'voteCount',
-            type: 'uint256',
-          },
-          {
-            internalType: 'bool',
-            name: 'votingIsClosed',
-            type: 'bool',
-          },
-          {
-            internalType: 'bool',
-            name: 'isAccepted',
-            type: 'bool',
-          },
         ],
         internalType: 'struct VoteAdministration.Proposal',
         name: '',
@@ -391,21 +376,6 @@ export const ABI = [
             internalType: 'string',
             name: 'description',
             type: 'string',
-          },
-          {
-            internalType: 'uint256',
-            name: 'voteCount',
-            type: 'uint256',
-          },
-          {
-            internalType: 'bool',
-            name: 'votingIsClosed',
-            type: 'bool',
-          },
-          {
-            internalType: 'bool',
-            name: 'isAccepted',
-            type: 'bool',
           },
         ],
         internalType: 'struct VoteAdministration.Proposal[]',
@@ -594,6 +564,25 @@ export const ABI = [
     inputs: [
       {
         internalType: 'uint256',
+        name: '_proposalId',
+        type: 'uint256',
+      },
+    ],
+    name: 'proposalExists',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
         name: '',
         type: 'uint256',
       },
@@ -614,21 +603,6 @@ export const ABI = [
         internalType: 'string',
         name: 'description',
         type: 'string',
-      },
-      {
-        internalType: 'uint256',
-        name: 'voteCount',
-        type: 'uint256',
-      },
-      {
-        internalType: 'bool',
-        name: 'votingIsClosed',
-        type: 'bool',
-      },
-      {
-        internalType: 'bool',
-        name: 'isAccepted',
-        type: 'bool',
       },
     ],
     stateMutability: 'view',

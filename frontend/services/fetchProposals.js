@@ -1,5 +1,4 @@
-// utils/fetchProposals.js
-import getProposals from '../utils/getters/getProposals';
+import getProposals from '../utils/VoteAdministration/getters/getProposals';
 
 const fetchProposals = async () => {
   try {

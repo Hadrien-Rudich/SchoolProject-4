@@ -1,12 +1,15 @@
 import { readContract } from '@wagmi/core';
-import { contractAddress, ABI } from '../../constants/VoteAdministration/index';
+import {
+  contractAddress,
+  ABI,
+} from '../../../constants/VoteAdministration/index';
 
-const getTokensPerNewVoter = async () => {
+const getProposals = async () => {
   try {
     const data = await readContract({
       address: contractAddress,
       abi: ABI,
-      functionName: 'getTokensPerNewVoter',
+      functionName: 'getProposals',
     });
     return data;
   } catch (err) {
@@ -19,4 +22,4 @@ const getTokensPerNewVoter = async () => {
   }
 };
 
-export default getTokensPerNewVoter;
+export default getProposals;

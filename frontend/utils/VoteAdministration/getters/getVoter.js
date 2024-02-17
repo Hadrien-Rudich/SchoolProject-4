@@ -1,5 +1,8 @@
 import { readContract } from '@wagmi/core';
-import { contractAddress, ABI } from '../../constants/VoteAdministration/index';
+import {
+  contractAddress,
+  ABI,
+} from '../../../constants/VoteAdministration/index';
 
 const getVoter = async (_voterAddress) => {
   try {
