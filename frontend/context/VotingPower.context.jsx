@@ -10,6 +10,7 @@ function VotingPowerUpdater({ children }) {
   const { address, isConnected } = useAccount();
   const [additionalVotingPower, setAdditionalVotingPower] = useState(0);
   const [currentVotingPower, setCurrentVotingPower] = useState(0);
+  const [votingPowerRequired, setVotingPowerRequired] = useState(1);
 
   // Define the fetchData function using useCallback to memoize it
   const fetchVotingPower = useCallback(async () => {
@@ -39,6 +40,8 @@ function VotingPowerUpdater({ children }) {
         currentVotingPower,
         setCurrentVotingPower,
         fetchVotingPower,
+        votingPowerRequired,
+        setVotingPowerRequired,
       }}
     >
       {children}

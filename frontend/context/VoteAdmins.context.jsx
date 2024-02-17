@@ -12,6 +12,7 @@ export function VoteAdminsContextProvider({ children }) {
 
   useEffect(() => {
     const fetchVoteAdmins = async () => {
+      if (!address) return;
       try {
         const voteAdminsArray = await getAdmins();
         setVoteAdmins(voteAdminsArray);

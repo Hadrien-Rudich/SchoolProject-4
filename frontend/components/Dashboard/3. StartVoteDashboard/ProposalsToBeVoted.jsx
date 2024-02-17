@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import Proposal from '../2. SetUpVoteDashboard/Proposal';
-import VoteButtons from './VoteButtons/VoteButtons';
 import { ProposalsContext } from '../../../context/Proposals.context';
+import VoteButtons from './VoteButtons/VoteButtons';
 
 function ProposalsToBeVoted() {
   const { proposalsArray } = useContext(ProposalsContext);
