@@ -10,6 +10,7 @@ function VotingPowerBar() {
 
   const additionalVotingPowerBarWidth = `${(currentVotingPower / additionalVotingPower) * 100}%`;
   const baseVotingPowerBarWidth = `${Number(voter.baseVotingPower)}`;
+  // const baseVotingPowerBarWidth = 100;
 
   const barColor =
     currentVotingPower / additionalVotingPower > 0.7

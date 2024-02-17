@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { VotingPowerContext } from '../../../../context/VotingPower.context';
-import castVote from '../../../../utils/QuadraticVoting/castVote';
+import castVote from '../../../../contracts/QuadraticVoting/castVote';
 
 function VoteAgainst({ id, voteIntent, setVoteIntent }) {
   const { fetchVotingPower } = useContext(VotingPowerContext);

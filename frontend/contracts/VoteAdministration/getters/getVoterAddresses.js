@@ -4,23 +4,22 @@ import {
   ABI,
 } from '../../../constants/VoteAdministration/index';
 
-const getVoterAdditionalPower = async (_addr) => {
+const getProposals = async () => {
   try {
     const data = await readContract({
       address: contractAddress,
       abi: ABI,
-      functionName: 'getVoterTokenBalance',
-      args: [_addr],
+      functionName: 'getVoterAddresses',
     });
     return data;
   } catch (err) {
     if (err.code === 4001) {
       console.log('Transaction rejected by user.');
     } else {
-      console.log('🔴 Error in getOneProposal: ', err.message);
+      console.log('🔴 Error in getVoterAddresses: ', err.message);
     }
     throw err;
   }
 };
 
-export default getVoterAdditionalPower;
+export default getProposals;

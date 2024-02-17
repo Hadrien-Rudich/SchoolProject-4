@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import setTokens from '../../../utils/VoteAdministration/0. VotingPowerAllocation/setTokens';
+import setTokens from '../../../contracts/VoteAdministration/0. VotingPowerAllocation/setTokens';
 import { VotingPowerContext } from '../../../context/VotingPower.context';
 
 function SetAdditionalVotingPower() {

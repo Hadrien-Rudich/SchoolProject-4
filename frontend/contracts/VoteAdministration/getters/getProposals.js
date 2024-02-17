@@ -16,7 +16,7 @@ const getProposals = async () => {
     if (err.code === 4001) {
       console.log('Transaction rejected by user.');
     } else {
-      console.log('🔴 Error in getOneProposal: ', err.message);
+      console.log('🔴 Error in getProposals: ', err.message);
     }
     throw err;
   }

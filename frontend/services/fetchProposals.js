@@ -1,4 +1,4 @@
-import getProposals from '../utils/VoteAdministration/getters/getProposals';
+import getProposals from '../contracts/VoteAdministration/getters/getProposals';
 
 const fetchProposals = async () => {
   try {

@@ -1,25 +1,24 @@
 import { readContract } from '@wagmi/core';
-import {
-  contractAddress,
-  ABI,
-} from '../../../constants/VoteAdministration/index';
+import { contractAddress, ABI } from '../../constants/QuadraticVoting/index';
 
-const getTokensPerNewVoter = async () => {
+const getVoteSummary = async (proposalId) => {
   try {
     const data = await readContract({
       address: contractAddress,
       abi: ABI,
-      functionName: 'getTokensPerNewVoter',
+      functionName: 'getVoteSummary',
+      args: [proposalId],
     });
+
     return data;
   } catch (err) {
     if (err.code === 4001) {
       console.log('Transaction rejected by user.');
     } else {
-      console.log('🔴 Error in getOneProposal: ', err.message);
+      console.error('ERROR: ', err);
     }
     throw err;
   }
 };
 
-export default getTokensPerNewVoter;
+export default getVoteSummary;

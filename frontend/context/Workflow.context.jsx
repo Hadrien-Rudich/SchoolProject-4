@@ -2,9 +2,9 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { parseAbiItem } from 'viem';
 import { getPublicClient } from '@wagmi/core';
-import setUpVote from '../utils/VoteAdministration/1. SetUpVote/setUpVote';
-import startVote from '../utils/VoteAdministration/2. StartVote/startVote';
-import endVote from '../utils/VoteAdministration/3. EndVote/endVote';
+import setUpVote from '../contracts/VoteAdministration/1. SetUpVote/setUpVote';
+import startVote from '../contracts/VoteAdministration/2. StartVote/startVote';
+import endVote from '../contracts/VoteAdministration/3. EndVote/endVote';
 
 export const WorkflowContext = createContext();
 

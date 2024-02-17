@@ -219,7 +219,7 @@ export const ABI = [
       },
       {
         internalType: 'uint256',
-        name: 'additionalVotingPower',
+        name: 'quadraticVotingPower',
         type: 'uint256',
       },
     ],
@@ -255,6 +255,30 @@ export const ABI = [
         internalType: 'bytes32',
         name: '',
         type: 'bytes32',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: 'proposalId',
+        type: 'uint256',
+      },
+    ],
+    name: 'getVoteSummary',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: 'totalVotesFor',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: 'totalVotesAgainst',
+        type: 'uint256',
       },
     ],
     stateMutability: 'view',
