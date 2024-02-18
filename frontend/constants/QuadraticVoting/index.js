@@ -1,4 +1,5 @@
-export const contractAddress = '0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9';
+// export const hardhatContractAddress = '0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9';
+export const contractAddress = '0xb1aae5A21dcB401d9a871a329ADC5fB1F80320da';
 
 export const ABI = [
   {
