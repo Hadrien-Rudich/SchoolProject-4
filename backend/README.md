@@ -11,3 +11,10 @@ REPORT_GAS=true npx hardhat test
 npx hardhat node
 npx hardhat run scripts/deploy.js
 ```
+
+SchoolProject-4 scripts :
+
+```shell
+npx hardhat run scripts/deployment/deployAll.js --network localhost
+npx hardhat run scripts/seeding/seed.js --network localhost
+```
