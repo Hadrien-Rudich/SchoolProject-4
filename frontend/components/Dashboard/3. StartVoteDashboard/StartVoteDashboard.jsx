@@ -15,13 +15,13 @@ function StartVoteDashboard() {
       <div>
         <ProposalsToBeVoted />
       </div>
-      <div className="w-full flex justify-center">
-        {voter && !voteAdmins.includes(address) && (
+      {voter && !voteAdmins.includes(address) && (
+        <div className="w-full flex justify-center">
           <div className=" my-10 w-2/3">
             <VotingPowerBar />
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }

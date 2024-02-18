@@ -18,7 +18,6 @@ const castVote = async (proposalId, voteDecision, additionalVotingPower) => {
     const data = await waitForTransaction({
       hash,
     });
-    console.log('DATA FROM CAST VOTE: =====', data);
     return data;
   } catch (err) {
     if (err.code === 4001) {

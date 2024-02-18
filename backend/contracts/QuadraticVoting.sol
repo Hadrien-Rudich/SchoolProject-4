@@ -46,7 +46,7 @@ contract QuadraticVoting is AccessControl {
     function castVote(
         uint256 proposalId,
         bool voteDecision,
-        uint256 additionalVotingPower
+        uint256 quadraticVotingPower
     ) public {
         if (
             !voteAdminContract.hasRole(
@@ -66,19 +66,18 @@ contract QuadraticVoting is AccessControl {
             revert VoterHasAlreadyVoted();
         }
 
-        uint256 requiredTokens = additionalVotingPower ** 2;
+        uint256 requiredHOT = quadraticVotingPower ** 2;
 
-        uint256 availableTokens = tokenContract.balanceOf(msg.sender);
-        if (availableTokens < requiredTokens) {
+        uint256 availableHOT = tokenContract.balanceOf(msg.sender);
+        if (availableHOT < requiredHOT) {
             revert VoterLacksCredits();
         }
 
         uint256 baseVotingPower = voteAdminContract
             .getVoter(msg.sender)
             .baseVotingPower;
-        uint256 totalVotingPower = baseVotingPower + additionalVotingPower;
+        uint256 totalVotingPower = baseVotingPower + requiredHOT;
 
-        //to be tested
         if (voteDecision) {
             voteDetails[msg.sender][proposalId].votesFor += totalVotingPower;
         } else {
@@ -86,13 +85,13 @@ contract QuadraticVoting is AccessControl {
                 .votesAgainst += totalVotingPower;
         }
 
-        tokenContract.burn(msg.sender, requiredTokens);
+        tokenContract.burn(msg.sender, requiredHOT);
 
         emit VoteCast(
             msg.sender,
             proposalId,
             voteDecision,
-            additionalVotingPower
+            quadraticVotingPower
         );
     }
 
@@ -108,5 +107,27 @@ contract QuadraticVoting is AccessControl {
 
     function getAdmins() external view returns (address[] memory) {
         return adminsArray;
+    }
+
+    function getVoteSummary(
+        uint256 proposalId
+    )
+        external
+        view
+        onlyRole(DEFAULT_ADMIN_ROLE)
+        returns (uint256 totalVotesFor, uint256 totalVotesAgainst)
+    {
+        if (!voteAdminContract.proposalExists(proposalId)) {
+            revert ProposalDoesNotExist();
+        }
+
+        address[] memory voterAddresses = voteAdminContract.getVoterAddresses();
+        for (uint i = 0; i < voterAddresses.length; i++) {
+            VoteDetail storage detail = voteDetails[voterAddresses[i]][
+                proposalId
+            ];
+            totalVotesFor += detail.votesFor;
+            totalVotesAgainst += detail.votesAgainst;
+        }
     }
 }

@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState, useContext, useEffect } from 'react';
 import { VotingPowerContext } from '../../../../context/VotingPower.context';
 import VoteAgainst from './VoteAgainst';

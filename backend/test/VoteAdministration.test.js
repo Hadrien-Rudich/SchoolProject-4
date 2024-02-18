@@ -69,6 +69,9 @@ async function deployVoteAdminInVotingSetUpWithMINTER_ROLE() {
     addr1.address
   );
 
+  const DEFAULT_ADMIN_ROLE =
+    "0x0000000000000000000000000000000000000000000000000000000000000000";
+
   await homeOwnerToken
     .connect(owner)
     .addMinterBurner(voteAdministration.target);
@@ -81,6 +84,7 @@ async function deployVoteAdminInVotingSetUpWithMINTER_ROLE() {
     addr1,
     addr2,
     addr3,
+    DEFAULT_ADMIN_ROLE,
   };
 }
 
@@ -766,6 +770,89 @@ describe("VoteAdministration Contract Tests", function () {
         .getTokensPerNewVoter();
 
       expect(tokensPerNewVoter).to.be.eq(999);
+    });
+  });
+
+  describe("getProposalIds", function () {
+    it("Should NOT be available to roles other than DEFAULT_ADMIN_ROLE", async function () {
+      const { voteAdministration, owner, addr3, DEFAULT_ADMIN_ROLE } =
+        await loadFixture(deployVoteAdministration);
+
+      await voteAdministration.connect(owner).setUpVotingSession();
+      await voteAdministration
+        .connect(owner)
+        .addProposal("Title1", "Description1");
+      await voteAdministration
+        .connect(owner)
+        .addProposal("Title2", "Description2");
+
+      await expect(voteAdministration.connect(addr3).getProposalIds())
+        .to.be.revertedWithCustomError(
+          voteAdministration,
+          "AccessControlUnauthorizedAccount"
+        )
+        .withArgs(addr3.address, DEFAULT_ADMIN_ROLE);
+    });
+    it("Should return an array of all proposalIds", async function () {
+      const { voteAdministration, owner } = await loadFixture(
+        deployVoteAdministration
+      );
+
+      await voteAdministration.connect(owner).setUpVotingSession();
+      await voteAdministration
+        .connect(owner)
+        .addProposal("Title1", "Description1");
+      await voteAdministration
+        .connect(owner)
+        .addProposal("Title2", "Description2");
+      await voteAdministration
+        .connect(owner)
+        .addProposal("Title3", "Description3");
+      await voteAdministration
+        .connect(owner)
+        .addProposal("Title4", "Description4");
+      await voteAdministration
+        .connect(owner)
+        .addProposal("Title5", "Description5");
+
+      const proposalIds = await voteAdministration
+        .connect(owner)
+        .getProposalIds();
+
+      const expected = [1, 2, 3, 4, 5];
+      const actualAsNumbers = proposalIds.map((n) => Number(n));
+      expect(actualAsNumbers).to.deep.equal(expected);
+    });
+  });
+
+  describe("getVoterAddresses", function () {
+    it("Should NOT be available to roles other than DEFAULT_ADMIN_ROLE", async function () {
+      const { voteAdministration, addr1, addr2, addr3, DEFAULT_ADMIN_ROLE } =
+        await loadFixture(deployVoteAdminInVotingSetUpWithMINTER_ROLE);
+
+      await voteAdministration.connect(addr1).addVoter(addr2.address, 100);
+      await voteAdministration.connect(addr1).addVoter(addr3.address, 100);
+
+      await expect(voteAdministration.connect(addr2).getVoterAddresses())
+        .to.be.revertedWithCustomError(
+          voteAdministration,
+          "AccessControlUnauthorizedAccount"
+        )
+        .withArgs(addr2.address, DEFAULT_ADMIN_ROLE);
+    });
+    it("Should return an array of all voters", async function () {
+      const { voteAdministration, addr1, addr2, addr3 } = await loadFixture(
+        deployVoteAdminInVotingSetUpWithMINTER_ROLE
+      );
+
+      await voteAdministration.connect(addr1).addVoter(addr2.address, 100);
+      await voteAdministration.connect(addr1).addVoter(addr3.address, 100);
+
+      const voterIds = await voteAdministration
+        .connect(addr1)
+        .getVoterAddresses();
+
+      expect(voterIds).to.deep.equal([addr2.address, addr3.address]);
     });
   });
 });

@@ -1,4 +1,4 @@
-import getVoterAdditionalPower from '../utils/VoteAdministration/getters/getVoterAdditionalPower';
+import getVoterAdditionalPower from '../contracts/VoteAdministration/getters/getVoterAdditionalPower';
 
 const fetchVoterAdditionalPower = async (voterAddress) => {
   try {

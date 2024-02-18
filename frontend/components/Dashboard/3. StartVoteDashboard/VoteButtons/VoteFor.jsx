@@ -1,10 +1,10 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { VotingPowerContext } from '../../../../context/VotingPower.context';
-import castVote from '../../../../utils/QuadraticVoting/castVote';
+import castVote from '../../../../contracts/QuadraticVoting/castVote';
 
 function VoteFor({ id, voteIntent, setVoteIntent }) {
   const { fetchVotingPower } = useContext(VotingPowerContext);
-  const [votingPowerRequired, setVotingPowerRequired] = useState(1);
+  const [, setVotingPowerRequired] = useState(1);
 
   useEffect(() => {
     setVotingPowerRequired(voteIntent ** 2);

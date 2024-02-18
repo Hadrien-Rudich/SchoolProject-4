@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-no-constructed-context-values */
 import { createContext, useState, useEffect } from 'react';
 import { useAccount } from 'wagmi';
-import getAdmins from '../utils/VoteAdministration/getters/getAdmins';
+import fetchVoteAdmins from '../services/fetchVoteAdmins';
 
 export const VoteAdminsContext = createContext();
 
@@ -11,17 +11,15 @@ export function VoteAdminsContextProvider({ children }) {
   const [voteAdmins, setVoteAdmins] = useState([]);
 
   useEffect(() => {
-    const fetchVoteAdmins = async () => {
-      if (!address) return;
+    const fetchData = async () => {
       try {
-        const voteAdminsArray = await getAdmins();
-        setVoteAdmins(voteAdminsArray);
-      } catch (err) {
-        console.error('Error fetching Vote Admins:', err.message);
+        const data = await fetchVoteAdmins();
+        setVoteAdmins(data);
+      } catch (error) {
+        console.error('Error fetching proposals:', error);
       }
     };
-
-    fetchVoteAdmins();
+    fetchData();
   }, [setVoteAdmins, address]);
 
   return (

@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import addProposal from '../../../utils/VoteAdministration/1. SetUpVote/addProposal';
+import addProposal from '../../../contracts/VoteAdministration/1. SetUpVote/addProposal';
 import fetchProposals from '../../../services/fetchProposals';
 import { ProposalsContext } from '../../../context/Proposals.context';
 

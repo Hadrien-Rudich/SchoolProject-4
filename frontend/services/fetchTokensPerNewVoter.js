@@ -1,5 +1,4 @@
-// utils/fetchProposals.js
-import getTokensPerNewVoter from '../utils/VoteAdministration/getters/getTokensPerNewVoter';
+import getTokensPerNewVoter from '../contracts/VoteAdministration/getters/getTokensPerNewVoter';
 
 const fetchTokensPerNewVoter = async () => {
   try {

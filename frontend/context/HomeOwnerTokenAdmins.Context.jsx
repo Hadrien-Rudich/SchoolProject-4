@@ -1,6 +1,7 @@
 /* eslint-disable react/jsx-no-constructed-context-values */
 import { createContext, useState, useEffect } from 'react';
-import getAdmins from '../utils/HomeTokenContract/getAdmins';
+// import getAdmins from '../contracts/HomeTokenContract/getAdmins';
+import fetchHomeOwnerTokenAdmins from '../services/fetchHomeOwnerTokenAdmins';
 
 export const HomeOwnerTokenAdminsContext = createContext();
 
@@ -8,16 +9,16 @@ export function HomeOwnerTokenAdminsContextProvider({ children }) {
   const [admins, setAdmins] = useState([]);
 
   useEffect(() => {
-    const fetchHomeOwnerTokenAdmins = async () => {
+    const fetchHOTadmins = async () => {
       try {
-        const adminsArray = await getAdmins();
+        const adminsArray = await fetchHomeOwnerTokenAdmins();
         setAdmins(adminsArray);
       } catch (err) {
         console.error('Error fetching admins:', err.message);
       }
     };
 
-    fetchHomeOwnerTokenAdmins();
+    fetchHOTadmins();
   }, []);
 
   return (

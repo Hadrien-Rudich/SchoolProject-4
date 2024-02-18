@@ -2,7 +2,7 @@ import {
   useState,
   // useContext
 } from 'react';
-import addVoter from '../../../utils/VoteAdministration/1. SetUpVote/addVoter';
+import addVoter from '../../../contracts/VoteAdministration/1. SetUpVote/addVoter';
 
 function AddVoter() {
   const [inputAddress, setInputAddress] = useState('');

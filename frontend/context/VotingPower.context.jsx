@@ -12,7 +12,6 @@ function VotingPowerUpdater({ children }) {
   const [currentVotingPower, setCurrentVotingPower] = useState(0);
   const [votingPowerRequired, setVotingPowerRequired] = useState(1);
 
-  // Define the fetchData function using useCallback to memoize it
   const fetchVotingPower = useCallback(async () => {
     if (isConnected && address) {
       try {
@@ -21,13 +20,14 @@ function VotingPowerUpdater({ children }) {
 
         setAdditionalVotingPower(Number(tokensPerNewVoter));
         setCurrentVotingPower(Number(remainingTokens));
+        console.log('tokenspernewvoter', tokensPerNewVoter);
+        console.log('remainingtokens', remainingTokens);
       } catch (error) {
         console.error('Error fetching voting power:', error);
       }
     }
   }, [address, isConnected]);
 
-  // Trigger fetchData on component mount and when address or isConnected changes
   useEffect(() => {
     fetchVotingPower();
   }, [fetchVotingPower]);

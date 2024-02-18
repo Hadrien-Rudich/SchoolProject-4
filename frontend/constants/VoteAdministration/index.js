@@ -358,6 +358,19 @@ export const ABI = [
   },
   {
     inputs: [],
+    name: 'getProposalIds',
+    outputs: [
+      {
+        internalType: 'uint256[]',
+        name: '',
+        type: 'uint256[]',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
     name: 'getProposals',
     outputs: [
       {
@@ -449,6 +462,19 @@ export const ABI = [
         internalType: 'struct VoteAdministration.Voter',
         name: '',
         type: 'tuple',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'getVoterAddresses',
+    outputs: [
+      {
+        internalType: 'address[]',
+        name: '',
+        type: 'address[]',
       },
     ],
     stateMutability: 'view',

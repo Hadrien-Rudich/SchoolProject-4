@@ -216,4 +216,30 @@ contract VoteAdministration is AccessControl {
     function getTokensPerNewVoter() external view returns (uint256) {
         return tokensPerNewVoter;
     }
+
+    function getProposalIds()
+        external
+        view
+        onlyRole(DEFAULT_ADMIN_ROLE)
+        returns (uint256[] memory)
+    {
+        uint256[] memory proposalIds = new uint256[](proposalCounter);
+        for (uint256 i = 1; i <= proposalCounter; i++) {
+            proposalIds[i - 1] = i;
+        }
+        return proposalIds;
+    }
+
+    function getVoterAddresses()
+        external
+        view
+        onlyRole(DEFAULT_ADMIN_ROLE)
+        returns (address[] memory)
+    {
+        address[] memory voterAddresses = new address[](voterCounter);
+        for (uint256 i = 0; i < voterCounter; i++) {
+            voterAddresses[i] = votersArray[i].voterAddress;
+        }
+        return voterAddresses;
+    }
 }

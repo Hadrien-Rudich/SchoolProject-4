@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import Proposal from '../2. SetUpVoteDashboard/Proposal';
+import TallyVoteButton from './TallyVoteButton';
 import { ProposalsContext } from '../../../context/Proposals.context';
-import VoteButtons from './VoteButtons/VoteButtons';
 
 function ProposalsToBeVoted() {
   const { proposalsArray } = useContext(ProposalsContext);
@@ -14,8 +14,7 @@ function ProposalsToBeVoted() {
             title={proposal.title}
             description={proposal.description}
           />
-
-          <VoteButtons id={Number(proposal.proposalId)} />
+          <TallyVoteButton id={proposal.proposalId} />
         </div>
       ))}
     </div>
