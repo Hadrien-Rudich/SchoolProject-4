@@ -1,5 +1,6 @@
 // export const hardhatContractAddress = '0xe7f1725e7734ce288f8367e1bb143e90bb3f0512';
-export const contractAddress = '0x876D32E49D297c8AbbD72C3e1d275927640a6A5e';
+// export const sepoliaContractAddress = '0x876D32E49D297c8AbbD72C3e1d275927640a6A5e';
+export const contractAddress = '0xe7f1725e7734ce288f8367e1bb143e90bb3f0512';
 
 export const ABI = [
   {

@@ -1,5 +1,7 @@
-export const contractAddress = '0x57B0B17bd5D06623f7F3BF1E5bbEC5a60C3E0d21';
+// export const sepoliaContractAddress = '0x57B0B17bd5D06623f7F3BF1E5bbEC5a60C3E0d21';
 // export const hardhatcontractAddress = '0x5fbdb2315678afecb367f032d93f642f64180aa3';
+export const contractAddress = '0x5fbdb2315678afecb367f032d93f642f64180aa3';
+
 export const ABI = [
   {
     inputs: [
