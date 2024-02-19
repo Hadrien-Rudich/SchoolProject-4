@@ -10,7 +10,6 @@ function VotingPowerBar() {
 
   const additionalVotingPowerBarWidth = `${(currentVotingPower / additionalVotingPower) * 100}%`;
   const baseVotingPowerBarWidth = `${Number(voter.baseVotingPower)}`;
-  // const baseVotingPowerBarWidth = 100;
 
   const barColor =
     currentVotingPower / additionalVotingPower > 0.7
@@ -20,7 +19,7 @@ function VotingPowerBar() {
         : 'bg-red-500';
 
   return (
-    <div className="w-full flex flex-col items-center gap-10">
+    <div className="p-5 w-full flex flex-col items-center gap-10">
       <div className="flex flex-col items-center gap-2">
         <p>Base Voting Power</p>
 
@@ -33,7 +32,7 @@ function VotingPowerBar() {
             {baseVotingPowerBarWidth}
           </p>
         </div>
-      </div>{' '}
+      </div>
       <div className="flex flex-col gap-2">
         <p>Additional Voting Power</p>
 

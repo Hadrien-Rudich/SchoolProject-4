@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { useAccount } from 'wagmi';
-import ProposalsToBeVoted from './ProposalsToBeVoted';
+import Proposals from '../2. SetUpVoteDashboard/Proposals';
 import VotingPowerBar from './VotingPowerBar';
 import { VotersContext } from '../../../context/Voters.context';
 import { VoteAdminsContext } from '../../../context/VoteAdmins.context';
@@ -11,13 +11,13 @@ function StartVoteDashboard() {
 
   const { voter } = useContext(VotersContext);
   return (
-    <div className="w-full flex flex-col gap-6 divide-y-4 divide-gray-300">
-      <div>
-        <ProposalsToBeVoted />
+    <div className=" w-full flex  divide-x-4 divide-gray-300">
+      <div className="w-full">
+        <Proposals />
       </div>
       {voter && !voteAdmins.includes(address) && (
-        <div className="w-full flex justify-center">
-          <div className=" my-10 w-2/3">
+        <div className="flex w-1/3 justify-center">
+          <div className="w-full">
             <VotingPowerBar />
           </div>
         </div>

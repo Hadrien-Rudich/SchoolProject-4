@@ -35,10 +35,10 @@ function AddProposalModal({ toggleModal }) {
   };
 
   return (
-    <div className="absolute top-0 w-full bg-white rounded-sm">
+    <div className="absolute top-[-2.5rem] z-20 w-full bg-white rounded-md">
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col gap-y-3 p-5 text-black rounded-sm"
+        className="w-full flex flex-col p-5 text-black rounded-md"
       >
         <Input
           inputText="Proposal title"
@@ -56,7 +56,7 @@ function AddProposalModal({ toggleModal }) {
             placeholder="Enter a description..."
             onChange={handleDescriptionChange}
             className={`h-80 w-2/3  p-3 bg-white border border-slate-300 rounded-md 
-            text-sm placeholder-slate-400 focus:outline-none 
+             placeholder-slate-400 focus:outline-none 
             focus:ring-1 focus:ring-black resize-vertical my-3 shadow-md`}
           />
         </div>

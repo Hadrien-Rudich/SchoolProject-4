@@ -35,7 +35,7 @@ function SetAdditionalVotingPower() {
       <form
         action="submit"
         onSubmit={handleSubmit}
-        className="flex flex-col my-10 gap-y-3 p-5 text-black items-center"
+        className="flex flex-col my-10 p-5 text-black items-center rounded-md"
       >
         <div className="flex flex-col gap-4">
           <Input

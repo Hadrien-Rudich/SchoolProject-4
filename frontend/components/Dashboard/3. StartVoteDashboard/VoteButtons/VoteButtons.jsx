@@ -24,35 +24,37 @@ function VoteButtons({ id }) {
               htmlFor="votingPowerSlider"
               className="block text-sm font-medium text-gray-700"
             />
-            <div className="flex justify-center w-full">
-              <input
-                id="votingPowerSlider"
-                type="range"
-                min="1"
-                max={maxVotes}
-                value={voteIntent}
-                onChange={(e) => setVoteIntent(Number(e.target.value))}
-                className="w-1/2 h-4 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
-              />
-            </div>
-            <div className="w-full flex justify-center">
-              <div className="w-1/2 flex justify-between text-xs">
-                <span>1 Vote</span>
-                <span>{maxVotes} Votes</span>
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-col items-center w-full">
+                <div className="w-full flex justify-around ">
+                  <span>1 Vote</span>
+                  <span>{maxVotes} Votes (max)</span>
+                </div>
+                <input
+                  id="votingPowerSlider"
+                  type="range"
+                  min="1"
+                  max={maxVotes}
+                  value={voteIntent}
+                  onChange={(e) => setVoteIntent(Number(e.target.value))}
+                  className="w-2/3 h-6 bg-gray-300 rounded-md appearance-none cursor-crosshair`"
+                />
+              </div>
+              <div className="w-full flex justify-center">
+                <div className="flex w-1/2 justify-center">
+                  <VoteAgainst
+                    voteIntent={voteIntent}
+                    setVoteIntent={setVoteIntent}
+                    id={id}
+                  />
+                  <VoteFor
+                    voteIntent={voteIntent}
+                    setVoteIntent={setVoteIntent}
+                    id={id}
+                  />
+                </div>
               </div>
             </div>
-          </div>
-          <div className="flex w-full justify-center">
-            <VoteFor
-              voteIntent={voteIntent}
-              setVoteIntent={setVoteIntent}
-              id={id}
-            />
-            <VoteAgainst
-              voteIntent={voteIntent}
-              setVoteIntent={setVoteIntent}
-              id={id}
-            />
           </div>
         </div>
       )}

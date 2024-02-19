@@ -23,11 +23,9 @@ function Workflow({ id, label, method }) {
       <button
         className={`${
           id < currentWorkflow
-            ? `bg-darkPastelGreen w-full h-full text-white rounded-sm shadow-lg transition duration-300 tracking-widest font-bold ${
-                !isDisabled ? 'hover:bg-darkerPastelGreen ease-in-out' : ''
-              }`
-            : `bg-gray-500 w-full h-full text-white  rounded-sm shadow-lg transition duration-300 tracking-widest font-bold ${
-                !isDisabled ? 'hover:bg-gray-600 ease-in-out' : ''
+            ? `bg-darkPastelGreen w-full h-full text-white rounded-md shadow-lg transition duration-300 font-semibold tracking-widest`
+            : `bg-gray-500 w-full h-full text-white rounded-md shadow-lg transition duration-300 font-semibold tracking-widest ${
+                !isDisabled ? 'hover:bg-darkPastelGreen ease-in-out' : ''
               }`
         }`}
         type="button"

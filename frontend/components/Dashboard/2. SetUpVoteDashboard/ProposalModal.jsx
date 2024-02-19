@@ -1,40 +1,74 @@
-function ProposalModal({ toggleModal, description, title, id }) {
+import React, { useEffect, useRef, useContext } from 'react';
+import { WorkflowContext } from '../../../context/Workflow.context';
+import { ProposalsContext } from '../../../context/Proposals.context';
+import Input from '../../Input';
+import Button from '../../Button';
+import VoteButtons from '../3. StartVoteDashboard/VoteButtons/VoteButtons';
+
+function ProposalModal({
+  toggleModal,
+  description,
+  title,
+  id,
+  position,
+  width,
+}) {
+  const { selectedProposal } = useContext(ProposalsContext);
+  const { currentWorkflow } = useContext(WorkflowContext);
+
+  const textareaRef = useRef(null);
+
+  useEffect(() => {
+    if (textareaRef.current) {
+      const element = textareaRef.current;
+      element.style.height = 'auto';
+      element.style.height = `${element.scrollHeight}px`;
+    }
+  }, [description]);
+
   return (
-    <div className="w-1/2 h-full absolute top-0 left-0 bg-blue-400 rounded-sm">
-      <div className="w-full flex items-center justify-center gap-4">
-        <p className="w-1/5 text-white">Proposal ID</p>
-        <input
-          disabled
-          value={id}
-          className="p-2 bg-blue-100 rounded-sm placeholder-blue-300 font-semibold text-gray-900 w-2/3 my-3 resize-vertical"
-        />
-      </div>
-      <div className="w-full flex items-center justify-center gap-4">
-        <p className="w-1/5 text-white">Proposal Title</p>
-        <input
-          disabled
-          value={title}
-          className="p-2 bg-blue-100 rounded-sm placeholder-blue-300 font-semibold text-gray-900 w-2/3 my-3 resize-vertical"
-        />
-      </div>
-      <div className="w-full flex items-center justify-center gap-4">
-        <p className="w-1/5 text-white">Proposal Description</p>
+    <div
+      className={`${width} p-5 min-h-[30vh] absolute ${position} bg-white rounded-sm`}
+    >
+      <Input
+        inputText="Proposal ID"
+        inputValue={id}
+        inputWidth="w-[10%]"
+        pWidth="w-1/5"
+        isReadOnly
+      />
+
+      <Input
+        inputText="Proposal Title"
+        inputValue={title}
+        inputWidth="w-2/3"
+        pWidth="w-1/5"
+        isReadOnly
+      />
+
+      <div className="w-full flex items-center gap-4">
+        <p className="w-1/5">Proposal Description</p>
         <textarea
-          disabled
+          ref={textareaRef}
           value={description}
-          className="p-2 bg-blue-100 rounded-sm placeholder-blue-300 font-semibold text-gray-900 w-2/3 my-3 h-full resize-vertical"
+          readOnly
+          className="p-3 border w-2/3 border-slate-300 rounded-md placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-black my-3 shadow-md resize-y"
         />
       </div>
+
       <div className="mt-10 flex">
-        <div className="w-1/5" />
+        <div className="w-1/4 flex ">
+          <Button
+            handleFunction={toggleModal}
+            buttonText="Close Proposal"
+            buttonColor="red"
+          />
+        </div>
+
         <div className="w-2/3 flex justify-around">
-          <button
-            type="button"
-            onClick={toggleModal}
-            className="w-fit text-red-500 border-2 tracking-wide font-semibold self-center p-2 rounded-md border-red-500 hover:bg-red-950 hover:translate-y-1"
-          >
-            Close Proposal
-          </button>
+          {currentWorkflow === 3 && (
+            <VoteButtons id={Number(selectedProposal)} />
+          )}
         </div>
       </div>
     </div>

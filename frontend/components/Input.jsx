@@ -1,5 +1,3 @@
-import React from 'react';
-
 function Input({
   inputText,
   inputValue,
@@ -7,11 +5,13 @@ function Input({
   onChange,
   inputWidth,
   pWidth,
+  isReadOnly,
 }) {
   return (
     <div className="w-full flex items-center gap-4">
       <p className={pWidth}>{inputText}</p>
       <input
+        readOnly={isReadOnly}
         type="text"
         value={inputValue}
         placeholder={placeHolderText}

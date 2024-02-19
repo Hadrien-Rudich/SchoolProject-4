@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { VotingPowerContext } from '../../../../context/VotingPower.context';
 import castVote from '../../../../contracts/QuadraticVoting/castVote';
+import Button from '../../../Button';
 
 function VoteAgainst({ id, voteIntent, setVoteIntent }) {
   const { fetchVotingPower } = useContext(VotingPowerContext);
@@ -18,18 +19,13 @@ function VoteAgainst({ id, voteIntent, setVoteIntent }) {
     } catch (err) {
       console.log('🔴 Error in handleSubmit: ', err.message);
     } finally {
-      setVoteIntent(1); // Reset vote intent after submission
+      setVoteIntent(1);
     }
   };
 
   return (
-    <form className="w-full flex justify-start" onSubmit={handleSubmit}>
-      <button
-        type="submit"
-        className="w-1/4 text-red-500 border-2 tracking-wide font-semibold self-center rounded-md border-red-500 hover:bg-red-950 hover:translate-y-1"
-      >
-        AGAINST
-      </button>
+    <form className="w-full flex justify-end" onSubmit={handleSubmit}>
+      <Button buttonText="Vote Against" buttonColor="red" />
     </form>
   );
 }

@@ -33,15 +33,15 @@ function AddVoter() {
       <form
         action="submit"
         onSubmit={handleSubmit}
-        className="flex flex-col  gap-y-3 p-5  text-black"
+        className="flex flex-col  gap-y-3 p-5  text-black rounded-md"
       >
         <Input
           inputText="New Voter Address"
           inputValue={inputAddress}
           placeHolderText="0x000000...."
           onChange={handleAddressChange}
-          inputWidth="w-2/3"
-          pWidth="w-1/5"
+          inputWidth="w-3/6"
+          textWidth="w-2/6"
         />
 
         <Input
@@ -49,8 +49,8 @@ function AddVoter() {
           inputValue={inputBaseVotingPower}
           placeHolderText="0"
           onChange={handleBaseVotingPowerChange}
-          inputWidth="w-1/6"
-          pWidth="w-1/5"
+          inputWidth="w-1/12"
+          textWidth="w-1/6"
         />
 
         <Button
