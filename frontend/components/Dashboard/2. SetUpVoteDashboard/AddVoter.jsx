@@ -1,14 +1,11 @@
-import {
-  useState,
-  // useContext
-} from 'react';
+import { useState } from 'react';
 import addVoter from '../../../contracts/VoteAdministration/1. SetUpVote/addVoter';
+import Button from '../../Button';
+import Input from '../../Input';
 
 function AddVoter() {
   const [inputAddress, setInputAddress] = useState('');
   const [inputBaseVotingPower, setInputBaseVotingPower] = useState('');
-
-  // const { admins } = useContext(VoteAdminsContext);
 
   const handleAddressChange = (e) => {
     setInputAddress(e.target.value);
@@ -32,41 +29,33 @@ function AddVoter() {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full my-4">
       <form
         action="submit"
         onSubmit={handleSubmit}
-        className="flex flex-col  gap-y-3 p-5 text-indigo-200"
+        className="flex flex-col  gap-y-3 p-5  text-black"
       >
-        <div className="w-full flex items-center gap-4">
-          <p className="w-1/5 text-white">New Voter Address</p>
-          <input
-            type="text"
-            value={inputAddress}
-            placeholder="0x000000...."
-            onChange={handleAddressChange}
-            className="p-2 bg-blue-100 rounded-sm placeholder-blue-300 font-semibold text-gray-900 w-2/3 my-3"
-          />
-        </div>
-        <div className="w-full flex items-center gap-4">
-          <p className="w-1/5 text-white">Base Voting Power</p>
-          <input
-            type="text"
-            value={inputBaseVotingPower}
-            placeholder="0"
-            onChange={handleBaseVotingPowerChange}
-            className=" p-2 bg-blue-100 rounded-sm placeholder-blue-300 font-semibold text-gray-900 w-1/5 my-3"
-          />
-        </div>
-        <div className="w-full flex justify-center">
-          <button
-            type="submit"
-            onClick={handleSubmit}
-            className="w-fit text-green-400 border-2 tracking-wide font-semibold  self-center p-2 rounded-md border-green-400 hover:bg-green-950 hover:translate-y-1"
-          >
-            Add Voter
-          </button>
-        </div>
+        <Input
+          inputText="New Voter Address"
+          inputValue={inputAddress}
+          placeHolderText="0x000000...."
+          onChange={handleAddressChange}
+          width="w-2/3"
+        />
+
+        <Input
+          inputText="Base Voting Power"
+          inputValue={inputBaseVotingPower}
+          placeHolderText="0"
+          onChange={handleBaseVotingPowerChange}
+          width="w-1/5"
+        />
+
+        <Button
+          handleFunction={handleSubmit}
+          buttonText="Add Voter"
+          buttonColor="green"
+        />
       </form>
     </div>
   );

@@ -6,9 +6,9 @@ const roboto = Roboto({ subsets: ['latin'], weight: ['400', '700'] });
 
 function Header() {
   return (
-    <header className="border-b-4 border-dotted border-blue-400 py-10 text-xl mb-20 w-full gap-x-10 text-gray-50 px-10 flex items-end">
+    <header className="bg-gray-500 border-b-4 border-dotted border-black py-10 text-xl mb-20 w-full gap-x-10 text-white px-10 flex items-end">
       <h1
-        className={`${roboto.className} text-blue-400 text-4xl tracking-wider`}
+        className={`${roboto.className}  text-4xl font-semibold tracking-wider`}
       >
         Home Owner Tokens
       </h1>

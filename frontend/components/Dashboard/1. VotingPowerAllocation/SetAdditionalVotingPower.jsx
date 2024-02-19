@@ -29,7 +29,7 @@ function SetAdditionalVotingPower() {
   };
 
   return (
-    <div className="w-full h-full flex flex-col divide-y-4 divide-black ">
+    <div className="w-full h-full flex flex-col divide-y-4 divide-gray-300 ">
       <form
         action="submit"
         onSubmit={handleSubmit}

@@ -26,7 +26,7 @@ function Layout({ children }) {
   const isVoter = isConnected && !!voter;
 
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full bg-gray-300">
       {isConnected ? (
         <>
           <Header />

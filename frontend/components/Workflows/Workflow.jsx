@@ -21,8 +21,8 @@ function Workflow({ id, label, method }) {
       <button
         className={`${
           id < currentWorkflow
-            ? 'bg-green-400 w-full h-full rounded-sm'
-            : 'bg-gray-400 w-full h-full rounded-sm'
+            ? 'bg-green-700 w-full h-full rounded-sm shadow-lg'
+            : 'bg-gray-500 w-full h-full rounded-sm shadow-lg'
         }`}
         type="button"
         onClick={handleClick}

@@ -11,7 +11,7 @@ function StartVoteDashboard() {
 
   const { voter } = useContext(VotersContext);
   return (
-    <div className="w-full flex flex-col gap-6 divide-y-4 divide-black">
+    <div className="w-full flex flex-col gap-6 divide-y-4 divide-gray-300">
       <div>
         <ProposalsToBeVoted />
       </div>
