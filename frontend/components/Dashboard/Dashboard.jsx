@@ -14,7 +14,10 @@ function Dashboard() {
 
   return (
     <div className=" flex justify-center h-fit ">
-      <div className="flex w-2/3 bg-white gap-2 relative">
+      <div
+        className="flex w-2/3
+bg-white gap-2 relative"
+      >
         {currentWorkflow === 1 && voteAdmins.includes(address) && (
           <div className="w-full">
             <VotingPowerAllocationDashboard />

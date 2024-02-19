@@ -2,7 +2,7 @@ import ProposalsTallied from './ProposalsTallied';
 
 function EndVoteDashboard() {
   return (
-    <div>
+    <div className="w-full">
       <ProposalsTallied />
     </div>
   );
