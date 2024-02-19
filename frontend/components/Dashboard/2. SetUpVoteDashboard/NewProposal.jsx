@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import AddProposalModal from './AddProposalModal';
+import Button from '../../Button';
 
 function NewProposal() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -8,22 +9,15 @@ function NewProposal() {
     setModalIsOpen(!modalIsOpen);
   };
   return (
-    <div className="">
-      {modalIsOpen ? (
-        <AddProposalModal toggleModal={toggleModal} />
-      ) : (
-        <div className="flex justify-center items-center">
-          <div className="w-full flex justify-center items-center">
-            <button
-              type="submit"
-              onClick={toggleModal}
-              className="mt-10 w-fit text-yellow-400 border-2 tracking-wide font-semibold self-center p-2 rounded-md border-yellow-400 hover:bg-yellow-950 hover:translate-y-1"
-            >
-              New Proposal
-            </button>
-          </div>
-        </div>
-      )}
+    <div className="relative z-10">
+      {modalIsOpen && <AddProposalModal toggleModal={toggleModal} />}
+      <div className="mt-10">
+        <Button
+          handleFunction={toggleModal}
+          buttonText="New Proposal"
+          buttonColor="gray"
+        />
+      </div>
     </div>
   );
 }

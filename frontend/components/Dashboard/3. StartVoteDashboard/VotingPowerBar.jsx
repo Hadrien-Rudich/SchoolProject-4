@@ -8,9 +8,7 @@ function VotingPowerBar() {
     useContext(VotingPowerContext);
   const { voter } = useContext(VotersContext);
 
-  const additionalVotingPowerBarWidth = `${(currentVotingPower / additionalVotingPower) * 100}%`;
-  const baseVotingPowerBarWidth = `${Number(voter.baseVotingPower)}`;
-  // const baseVotingPowerBarWidth = 100;
+  const currentVotingPowerWidth = `${(currentVotingPower / additionalVotingPower) * 100}%`;
 
   const barColor =
     currentVotingPower / additionalVotingPower > 0.7
@@ -19,30 +17,24 @@ function VotingPowerBar() {
         ? 'bg-yellow-500'
         : 'bg-red-500';
 
-  return (
-    <div className="w-full flex flex-col items-center gap-10">
-      <div className="flex flex-col items-center gap-2">
-        <p>Base Voting Power</p>
+  console.log(voter);
 
-        <div className="relative w-full flex justify-center bg-black rounded-full h-8 ">
-          <div
-            className="flex flex-colh-8 rounded-full bg-green-500"
-            style={{ width: Number(baseVotingPowerBarWidth) }}
-          />
-          <p className="absolute top-1 flex justify-center items-center">
-            {baseVotingPowerBarWidth}
-          </p>
-        </div>
-      </div>{' '}
+  return (
+    <div className="p-5 w-full flex flex-col items-center gap-10">
+      <div className="flex flex-col items-center gap-2">
+        <p className=""> Base Voting Power</p>
+        <p className="text-xl text-darkPastelGreen">
+          {Number(voter.baseVotingPower)}
+        </p>
+      </div>
       <div className="flex flex-col gap-2">
         <p>Additional Voting Power</p>
-
-        <div className="relative w-full flex justify-center bg-black rounded-full h-8 ">
+        <div className="relative w-full bg-gray-300 rounded-full h-8 overflow-hidden">
           <div
-            className={`flex flex-colh-8 rounded-full ${barColor}`}
-            style={{ width: additionalVotingPowerBarWidth }}
+            className={`h-8 rounded-full ${barColor}`}
+            style={{ width: currentVotingPowerWidth }}
           />
-          <p className="absolute top-1 flex justify-center items-center">
+          <p className="absolute inset-0 flex justify-center items-center text-white">
             {currentVotingPower} / {additionalVotingPower}
           </p>
         </div>

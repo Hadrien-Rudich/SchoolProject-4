@@ -1,6 +1,8 @@
 import { useState, useContext } from 'react';
 import setTokens from '../../../contracts/VoteAdministration/0. VotingPowerAllocation/setTokens';
 import { VotingPowerContext } from '../../../context/VotingPower.context';
+import Input from '../../Input';
+import Button from '../../Button';
 
 function SetAdditionalVotingPower() {
   const [input, setInput] = useState('');
@@ -29,38 +31,36 @@ function SetAdditionalVotingPower() {
   };
 
   return (
-    <div className="w-full h-full flex flex-col divide-y-4 divide-black ">
+    <div className="w-full h-full flex flex-col divide-y-4 divide-gray-300">
       <form
         action="submit"
         onSubmit={handleSubmit}
-        className="flex flex-col my-10 gap-y-3 p-5 text-indigo-200"
+        className="flex flex-col my-10 p-5 text-black items-center rounded-md"
       >
-        <div className="w-full flex gap-4 justify-center items-center">
-          <p className=" text-white">Additional Voting Power</p>
-
-          <input
-            type="text"
-            value={input}
-            placeholder="0"
+        <div className="flex flex-col gap-4">
+          <Input
+            inputText="Additional Voting Power"
+            inputValue={input}
+            placeHolderText="0"
             onChange={handleChange}
-            className="p-2 bg-blue-100 rounded-sm placeholder-blue-300 font-semibold text-gray-900 w-2/3 my-3"
+            inputWidth="w-1/3"
+            pWidth="w-1/2"
+          />
+
+          <Button
+            handleFunction={handleSubmit}
+            buttonText="Set Additional Voting Power"
+            buttonColor="green"
           />
         </div>
-        <div className="w-full flex justify-center">
-          <button
-            type="submit"
-            onClick={handleSubmit}
-            className="text-green-400 border-2 tracking-wide font-semibold w-fit self-center p-2 rounded-md border-green-400 hover:bg-green-950 hover:translate-y-1"
-          >
-            Set Power
-          </button>
-        </div>
       </form>
-      <div className="flex items-center justify-center">
+      <div className="flex items-center justify-center text-black">
         {additionalVotingPower && (
-          <div className="my-10 flex flex-col items-center justify-center gap-4">
-            <p> Current Additional Voting Power:</p>
-            <p className="text-2xl text-green-400">{additionalVotingPower}</p>
+          <div className="my-10 flex flex-col items-center justify-center gap-4 ">
+            <p className=""> Current Additional Voting Power</p>
+            <p className="text-xl text-darkPastelGreen">
+              {additionalVotingPower}
+            </p>
           </div>
         )}
       </div>

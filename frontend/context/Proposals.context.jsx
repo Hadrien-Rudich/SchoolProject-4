@@ -6,7 +6,8 @@ export const ProposalsContext = createContext();
 
 export function ProposalsContextProvider({ children }) {
   const [proposalsArray, setProposalsArray] = useState([]);
-
+  const [proposalModalIsOpen, setProposalModalIsOpen] = useState(false);
+  const [selectedProposal, setSelectedProposal] = useState(null);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -24,6 +25,10 @@ export function ProposalsContextProvider({ children }) {
       value={{
         proposalsArray,
         setProposalsArray,
+        proposalModalIsOpen,
+        setProposalModalIsOpen,
+        selectedProposal,
+        setSelectedProposal,
       }}
     >
       {children}

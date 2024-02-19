@@ -13,21 +13,21 @@ export function WorkflowContextProvider({ children }) {
   const [workflowStatus, setWorkflowStatus] = useState([
     {
       id: 0,
-      label: 'Voting Power Allocation',
+      label: 'VOTING POWER ALLOCATION',
     },
     {
       id: 1,
-      label: 'Set Up Vote',
+      label: 'SET UP VOTE',
       method: setUpVote,
     },
     {
       id: 2,
-      label: 'Start Vote',
+      label: 'START VOTE',
       method: startVote,
     },
     {
       id: 3,
-      label: 'End Vote',
+      label: 'END VOTE',
       method: endVote,
     },
   ]);

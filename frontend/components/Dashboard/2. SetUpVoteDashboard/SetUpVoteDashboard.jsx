@@ -9,11 +9,11 @@ function SetUpVoteDashboard() {
 
   return (
     <div className="w-full ">
-      <div className="w-full flex divide-x-4 divide-black ">
+      <div className="w-full flex divide-x-4 divide-gray-300 ">
         <div
           className={`${
             proposalsArray.length === 0 ? 'w-full ' : 'w-1/2 '
-          }flex flex-col gap-2 divide-y-4 divide-black`}
+          }flex flex-col gap-2 divide-y-4 divide-gray-300`}
         >
           <div>
             <AddVoter />

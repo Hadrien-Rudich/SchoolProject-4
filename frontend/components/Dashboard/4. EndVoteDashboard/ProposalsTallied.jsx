@@ -6,7 +6,7 @@ import { ProposalsContext } from '../../../context/Proposals.context';
 function ProposalsToBeVoted() {
   const { proposalsArray } = useContext(ProposalsContext);
   return (
-    <div className="h-1/3 w-full grid grid-cols-2 gap-2">
+    <div className="p-5 h-full w-full grid grid-cols-2 gap-2">
       {proposalsArray.map((proposal) => (
         <div key={proposal.proposalId}>
           <Proposal

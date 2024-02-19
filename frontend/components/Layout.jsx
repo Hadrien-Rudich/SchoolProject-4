@@ -26,15 +26,15 @@ function Layout({ children }) {
   const isVoter = isConnected && !!voter;
 
   return (
-    <div className="w-full h-full">
+    <div className="">
       {isConnected ? (
         <>
           <Header />
-          <div className="w-full h-full flex flex-col gap-6">
+          <div className="flex flex-col gap-6">
             <div className="w-full">
               <Workflows />
             </div>
-            <div className="w-full h-full">
+            <div className="">
               <Dashboard key={key} isAdmin={isAdmin} isVoter={isVoter} />
             </div>
           </div>

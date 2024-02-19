@@ -1,33 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+/* Adding global gradient background to body */
+@layer base {
+  body {
+    background: linear-gradient(to bottom, #e8ecef 0%, #7a8088 100%);
+    min-height: 100vh;
+    font-family: 'Roboto', sans-serif;
+    letter-spacing: 0.025rem;
   }
-}
-
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+/* Custom Slider Thumb and Track Styles */
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  background: #5a52b6;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+input[type='range']::-webkit-slider-runnable-track {
+  background: #d1d5db; /* Gray background for the track */
+  height: 12px;
+  cursor: pointer;
+  border-radius: 0.125rem; /* Equivalent to Tailwind's rounded-sm */
+}
+
+input[type='range']::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: #5a52b6;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+input[type='range']::-moz-range-track {
+  background: #d1d5db; /* Gray background for the track in Firefox */
+  height: 6px;
+  cursor: pointer;
+  border-radius: 0.125rem; /* Equivalent to Tailwind's rounded-sm */
+}
+
+input[type='range'] {
+  -webkit-appearance: none;
+  width: 66%; /* Adjusted to full width for consistency */
+  background: transparent;
+}
+
+/* Ensuring the slider is focusable but does not show a focus outline */
+input[type='range']:focus {
+  outline: none;
 }

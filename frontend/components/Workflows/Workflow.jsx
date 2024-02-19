@@ -16,17 +16,21 @@ function Workflow({ id, label, method }) {
     }
   };
 
+  const isDisabled = id !== currentWorkflow || id === 0 || id === 4;
+
   return (
     <div className="w-1/4">
       <button
         className={`${
           id < currentWorkflow
-            ? 'bg-green-400 w-full h-full rounded-sm'
-            : 'bg-gray-400 w-full h-full rounded-sm'
+            ? `bg-darkPastelGreen w-full h-full text-white rounded-md shadow-lg transition duration-300 font-semibold tracking-widest`
+            : `bg-gray-500 w-full h-full text-white rounded-md shadow-lg transition duration-300 font-semibold tracking-widest ${
+                !isDisabled ? 'hover:bg-darkPastelGreen ease-in-out' : ''
+              }`
         }`}
         type="button"
         onClick={handleClick}
-        disabled={id !== currentWorkflow || id === 0 || id === 4}
+        disabled={isDisabled}
       >
         {label}
       </button>

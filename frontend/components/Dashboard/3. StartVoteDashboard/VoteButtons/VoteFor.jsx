@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { VotingPowerContext } from '../../../../context/VotingPower.context';
 import castVote from '../../../../contracts/QuadraticVoting/castVote';
+import Button from '../../../Button';
 
 function VoteFor({ id, voteIntent, setVoteIntent }) {
   const { fetchVotingPower } = useContext(VotingPowerContext);
@@ -24,12 +25,7 @@ function VoteFor({ id, voteIntent, setVoteIntent }) {
 
   return (
     <form className="w-full flex justify-end" onSubmit={handleSubmit}>
-      <button
-        type="submit"
-        className="w-1/4 text-green-500 border-2 tracking-wide font-semibold self-center rounded-md border-green-500 hover:bg-green-950 hover:translate-y-1"
-      >
-        FOR
-      </button>
+      <Button buttonText="Vote For" buttonColor="green" />
     </form>
   );
 }
