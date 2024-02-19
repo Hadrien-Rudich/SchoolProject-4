@@ -45,7 +45,8 @@ function AddProposalModal({ toggleModal }) {
           inputValue={inputTitle}
           placeHolderText="Enter a title..."
           onChange={handleTitleChange}
-          width="w-2/3"
+          inputWidth="w-2/3"
+          pWidth="w-1/5"
         />
 
         <div className="w-full flex items-center gap-4 ">

@@ -40,7 +40,8 @@ function AddVoter() {
           inputValue={inputAddress}
           placeHolderText="0x000000...."
           onChange={handleAddressChange}
-          width="w-2/3"
+          inputWidth="w-2/3"
+          pWidth="w-1/5"
         />
 
         <Input
@@ -48,7 +49,8 @@ function AddVoter() {
           inputValue={inputBaseVotingPower}
           placeHolderText="0"
           onChange={handleBaseVotingPowerChange}
-          width="w-1/5"
+          inputWidth="w-1/6"
+          pWidth="w-1/5"
         />
 
         <Button

@@ -14,7 +14,11 @@ function NewProposal() {
         <AddProposalModal toggleModal={toggleModal} />
       ) : (
         <div className="mt-10">
-          <Button handleFunction={toggleModal} buttonText="New Proposal" />
+          <Button
+            handleFunction={toggleModal}
+            buttonText="New Proposal"
+            buttonColor="gray"
+          />
         </div>
       )}
     </div>

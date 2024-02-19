@@ -17,12 +17,12 @@ const RoleHandler = () => {
   const renderUserRole = () => {
     if (voteAdmins && voteAdmins.includes(address))
       return (
-        <div className="flex justify-center items-center">
-          <p className="text-white font-semibold">Connected as Vote Admin</p>
+        <div className="flex justify-center items-center ">
+          <p className="text-black font-semibold">Connected as Vote Admin</p>
         </div>
       );
     if (voter)
-      return <p className="text-white font-semibold">Connected as Voter</p>;
+      return <p className="text-black font-semibold">Connected as Voter</p>;
     return null;
   };
 

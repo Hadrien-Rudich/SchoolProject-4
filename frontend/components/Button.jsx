@@ -1,12 +1,14 @@
+/* eslint-disable no-nested-ternary */
 function Button({ handleFunction, buttonText, buttonColor }) {
   const baseClass =
-    'w-fit text-black border-2 tracking-wide font-semibold self-center p-2 rounded-md transition duration-300 ease-in-out shadow-md';
+    'w-fit text-black border tracking-wide font-semibold self-center p-2 rounded-md transition duration-300 ease-in-out shadow-md';
 
   const colorClass =
     buttonColor === 'red'
       ? 'bg-red-200 border-red-300 hover:bg-red-300'
-      : buttonColor === 'green' &&
-        'bg-green-200 border-green-300 hover:bg-green-300';
+      : buttonColor === 'green'
+        ? 'bg-green-200 border-green-300 hover:bg-green-300'
+        : 'bg-blue-200 border-blue-300 hover:bg-blue-300';
 
   return (
     <div className="w-full flex justify-center">
