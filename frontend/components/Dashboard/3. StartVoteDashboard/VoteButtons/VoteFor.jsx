@@ -1,3 +1,4 @@
+import { toast } from 'react-toastify';
 import React, { useState, useContext, useEffect } from 'react';
 import { VotingPowerContext } from '../../../../context/VotingPower.context';
 import castVote from '../../../../contracts/QuadraticVoting/castVote';
@@ -14,8 +15,13 @@ function VoteFor({ id, voteIntent, setVoteIntent }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await castVote(id, true, voteIntent);
-      fetchVotingPower();
+      const data = await castVote(id, false, voteIntent);
+      if (data.status === 'success') {
+        toast.success(`Vote Cast: FOR Proposal ID: ${id}`, {
+          position: 'top-right',
+        });
+        fetchVotingPower();
+      }
     } catch (err) {
       console.log('🔴 Error in handleSubmit: ', err.message);
     } finally {

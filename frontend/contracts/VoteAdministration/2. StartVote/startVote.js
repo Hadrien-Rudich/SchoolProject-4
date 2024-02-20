@@ -1,4 +1,8 @@
-import { writeContract } from '@wagmi/core';
+import {
+  prepareWriteContract,
+  writeContract,
+  waitForTransaction,
+} from '@wagmi/core';
 import {
   contractAddress,
   ABI,
@@ -6,10 +10,14 @@ import {
 
 const startVote = async () => {
   try {
-    const data = await writeContract({
+    const { request } = await prepareWriteContract({
       address: contractAddress,
       abi: ABI,
       functionName: 'startVotingSession',
+    });
+    const { hash } = await writeContract(request);
+    const data = await waitForTransaction({
+      hash,
     });
     return data;
   } catch (err) {

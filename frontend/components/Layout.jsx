@@ -1,5 +1,7 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { useAccount } from 'wagmi';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { UserContext } from '../context/User.context';
 import { VoteAdminsContext } from '../context/VoteAdmins.context';
 import { VotersContext } from '../context/Voters.context';
@@ -43,6 +45,7 @@ function Layout({ children }) {
         <Header />
       )}
       <div className="">{children}</div>
+      <ToastContainer />
     </div>
   );
 }

@@ -1,3 +1,4 @@
+import { toast } from 'react-toastify';
 import { useState, useContext } from 'react';
 import addProposal from '../../../contracts/VoteAdministration/1. SetUpVote/addProposal';
 import fetchProposals from '../../../services/fetchProposals';
@@ -28,8 +29,14 @@ function AddProposalModal({ toggleModal }) {
         toggleModal();
         const fetchedProposals = await fetchProposals();
         setProposalsArray(fetchedProposals);
+        toast.success('New Proposal Added', {
+          position: 'top-right',
+        });
       }
     } catch (error) {
+      toast.error('Proposal Addition Failed', {
+        position: 'top-right',
+      });
       console.error('Error during transaction:', error);
     }
   };
