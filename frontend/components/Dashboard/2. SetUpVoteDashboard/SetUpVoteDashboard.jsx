@@ -1,11 +1,18 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import AddVoter from './AddVoter';
 import NewProposal from './NewProposal';
 import Proposals from './Proposals';
+import AddProposalModal from './AddProposalModal';
+
 import { ProposalsContext } from '../../../context/Proposals.context';
 
 function SetUpVoteDashboard() {
   const { proposalsArray } = useContext(ProposalsContext);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  const toggleModal = () => {
+    setModalIsOpen(!modalIsOpen);
+  };
 
   return (
     <div className="w-full ">
@@ -19,7 +26,21 @@ function SetUpVoteDashboard() {
             <AddVoter />
           </div>
           <div className="mb-10">
-            <NewProposal />
+            {modalIsOpen ? (
+              <div className="">
+                <NewProposal
+                  toggleModal={toggleModal}
+                  modalIsOpen={modalIsOpen}
+                />
+              </div>
+            ) : (
+              <div className="">
+                <AddProposalModal
+                  toggleModal={toggleModal}
+                  modalIsOpen={modalIsOpen}
+                />
+              </div>
+            )}
           </div>
         </div>
         {proposalsArray.length > 0 && (
