@@ -7,7 +7,7 @@ export const ProposalsContext = createContext();
 export function ProposalsContextProvider({ children }) {
   const [proposalsArray, setProposalsArray] = useState([]);
   const [proposalModalIsOpen, setProposalModalIsOpen] = useState(false);
-  const [selectedProposal, setSelectedProposal] = useState(null);
+  const [selectedProposal, setSelectedProposal] = useState({});
   useEffect(() => {
     const fetchData = async () => {
       try {

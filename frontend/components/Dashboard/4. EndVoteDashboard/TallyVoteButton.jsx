@@ -23,11 +23,10 @@ function TallyVoteButton({ id }) {
   const againstVotesPercentage =
     totalVotes > 0 ? (Number(voteSummary[1]) / totalVotes) * 100 : 0;
 
-  // Use a gradient to visually represent the votes
   const voteGradient = `linear-gradient(to right, #68D391 ${forVotesPercentage}%, #FC8181 ${forVotesPercentage}% ${forVotesPercentage + againstVotesPercentage}%)`;
 
   return (
-    <div>
+    <div className="px-5">
       <form onSubmit={handleSubmit}>
         {voteSummary === null ? (
           <Button
