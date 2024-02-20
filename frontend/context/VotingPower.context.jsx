@@ -20,8 +20,6 @@ function VotingPowerUpdater({ children }) {
 
         setAdditionalVotingPower(Number(tokensPerNewVoter));
         setCurrentVotingPower(Number(remainingTokens));
-        console.log('tokenspernewvoter', tokensPerNewVoter);
-        console.log('remainingtokens', remainingTokens);
       } catch (error) {
         console.error('Error fetching voting power:', error);
       }

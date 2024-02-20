@@ -15,7 +15,7 @@ function VoteFor({ id, voteIntent, setVoteIntent }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const data = await castVote(id, false, voteIntent);
+      const data = await castVote(id, true, voteIntent);
       if (data.status === 'success') {
         toast.success(`Vote Cast: FOR Proposal ID: ${id}`, {
           position: 'top-right',
@@ -23,6 +23,9 @@ function VoteFor({ id, voteIntent, setVoteIntent }) {
         fetchVotingPower();
       }
     } catch (err) {
+      toast.error('Vote Cast Failed', {
+        position: 'top-right',
+      });
       console.log('🔴 Error in handleSubmit: ', err.message);
     } finally {
       setVoteIntent(1);

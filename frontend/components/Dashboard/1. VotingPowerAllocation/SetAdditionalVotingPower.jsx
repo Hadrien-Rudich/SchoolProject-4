@@ -22,7 +22,6 @@ function SetAdditionalVotingPower() {
     try {
       const data = await setTokens(input);
       if (data.status === 'success') {
-        console.log(data);
         setInput('');
         setAdditionalVotingPower(input);
         setCurrentVotingPower(input);
