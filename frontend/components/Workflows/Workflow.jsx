@@ -1,17 +1,32 @@
+import { toast } from 'react-toastify';
 import { useContext } from 'react';
 import { WorkflowContext } from '../../context/Workflow.context';
 
 function Workflow({ id, label, method }) {
-  const { updateWorkflow, currentWorkflow } = useContext(WorkflowContext);
+  const { updateWorkflow, workflowStatus, currentWorkflow } =
+    useContext(WorkflowContext);
 
   const handleClick = async () => {
     try {
       if (id === 0 || id === 4) {
         return;
       }
-      await method();
-      await updateWorkflow();
+      const data = await method();
+      if (data.status === 'success') {
+        await updateWorkflow();
+        toast.success(
+          `Voting Session Updated:
+          [${workflowStatus[currentWorkflow - 1].label}] --->
+          [${workflowStatus[currentWorkflow].label}]`,
+          {
+            position: 'top-right',
+          }
+        );
+      }
     } catch (error) {
+      toast.error('Voting Session Update Failed', {
+        position: 'top-right',
+      });
       console.log(error);
     }
   };

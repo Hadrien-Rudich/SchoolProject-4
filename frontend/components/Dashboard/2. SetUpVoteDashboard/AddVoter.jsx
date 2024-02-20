@@ -1,3 +1,4 @@
+import { toast } from 'react-toastify';
 import { useState } from 'react';
 import addVoter from '../../../contracts/VoteAdministration/1. SetUpVote/addVoter';
 import Button from '../../Button';
@@ -22,8 +23,18 @@ function AddVoter() {
       if (data.status === 'success') {
         setInputAddress('');
         setInputBaseVotingPower('');
+        toast.success(
+          `New Voter Added: [${inputAddress}] ---- Voting Power: [${inputBaseVotingPower}]
+          `,
+          {
+            position: 'top-right',
+          }
+        );
       }
     } catch (error) {
+      toast.error('Voter Addition Failed', {
+        position: 'top-right',
+      });
       console.error('Error during transaction:', error);
     }
   };

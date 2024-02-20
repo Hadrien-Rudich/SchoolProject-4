@@ -1,3 +1,4 @@
+import { toast } from 'react-toastify';
 import { useState, useContext } from 'react';
 import setTokens from '../../../contracts/VoteAdministration/0. VotingPowerAllocation/setTokens';
 import { VotingPowerContext } from '../../../context/VotingPower.context';
@@ -21,11 +22,18 @@ function SetAdditionalVotingPower() {
     try {
       const data = await setTokens(input);
       if (data.status === 'success') {
+        console.log(data);
         setInput('');
         setAdditionalVotingPower(input);
         setCurrentVotingPower(input);
+        toast.success(`Additional Voting Power Set To: ${input}`, {
+          position: 'top-right',
+        });
       }
     } catch (error) {
+      toast.error('Voting Power Allocation Failed', {
+        position: 'top-right',
+      });
       console.error('Error during transaction:', error);
     }
   };
