@@ -5,18 +5,17 @@ import Input from '../../Input';
 import Button from '../../Button';
 import VoteButtons from '../3. StartVoteDashboard/VoteButtons/VoteButtons';
 
-function ProposalModal({
-  toggleModal,
-  description,
-  title,
-  id,
-  position,
-  width,
-}) {
-  const { selectedProposal } = useContext(ProposalsContext);
+function ProposalModal() {
+  const { selectedProposal, setSelectedProposal, setProposalModalIsOpen } =
+    useContext(ProposalsContext);
   const { currentWorkflow } = useContext(WorkflowContext);
 
   const textareaRef = useRef(null);
+
+  const handleModalClose = () => {
+    setSelectedProposal({});
+    setProposalModalIsOpen(false);
+  };
 
   useEffect(() => {
     if (textareaRef.current) {
@@ -24,15 +23,13 @@ function ProposalModal({
       element.style.height = 'auto';
       element.style.height = `${element.scrollHeight}px`;
     }
-  }, [description]);
+  }, [selectedProposal.description]);
 
   return (
-    <div
-      className={`${width} p-5 min-h-[30vh] absolute ${position} bg-white rounded-sm`}
-    >
+    <div className={` p-5  bg-white rounded-sm`}>
       <Input
         inputText="Proposal ID"
-        inputValue={id}
+        inputValue={Number(selectedProposal.proposalId)}
         inputWidth="w-[10%]"
         pWidth="w-1/5"
         isReadOnly
@@ -40,7 +37,7 @@ function ProposalModal({
 
       <Input
         inputText="Proposal Title"
-        inputValue={title}
+        inputValue={selectedProposal.title}
         inputWidth="w-2/3"
         pWidth="w-1/5"
         isReadOnly
@@ -50,7 +47,7 @@ function ProposalModal({
         <p className="w-1/5">Proposal Description</p>
         <textarea
           ref={textareaRef}
-          value={description}
+          value={selectedProposal.description}
           readOnly
           className="p-3 border w-2/3 border-slate-300 rounded-md placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-black my-3 shadow-md resize-y"
         />
@@ -59,7 +56,7 @@ function ProposalModal({
       <div className="mt-10 flex">
         <div className="w-1/4 flex ">
           <Button
-            handleFunction={toggleModal}
+            handleFunction={handleModalClose}
             buttonText="Close Proposal"
             buttonColor="red"
           />
@@ -67,7 +64,7 @@ function ProposalModal({
 
         <div className="w-2/3 flex justify-around">
           {currentWorkflow === 3 && (
-            <VoteButtons id={Number(selectedProposal)} />
+            <VoteButtons id={Number(selectedProposal.proposalId)} />
           )}
         </div>
       </div>

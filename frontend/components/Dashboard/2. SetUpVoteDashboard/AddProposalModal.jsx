@@ -35,7 +35,7 @@ function AddProposalModal({ toggleModal }) {
   };
 
   return (
-    <div className="absolute top-[-2.5rem] z-20 w-full bg-white rounded-md">
+    <div className="w-full bg-white rounded-md">
       <form
         onSubmit={handleSubmit}
         className="w-full flex flex-col p-5 text-black rounded-md"

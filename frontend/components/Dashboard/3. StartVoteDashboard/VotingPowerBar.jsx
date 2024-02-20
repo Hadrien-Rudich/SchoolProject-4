@@ -34,7 +34,7 @@ function VotingPowerBar() {
             className={`h-8 rounded-full ${barColor}`}
             style={{ width: currentVotingPowerWidth }}
           />
-          <p className="absolute inset-0 flex justify-center items-center text-white">
+          <p className="absolute inset-0 flex justify-center items-center text-black">
             {currentVotingPower} / {additionalVotingPower}
           </p>
         </div>

@@ -49,7 +49,7 @@ function AddVoter() {
           inputValue={inputBaseVotingPower}
           placeHolderText="0"
           onChange={handleBaseVotingPowerChange}
-          inputWidth="w-1/6"
+          inputWidth="w-1/8"
           pWidth="w-1/6"
         />
 
