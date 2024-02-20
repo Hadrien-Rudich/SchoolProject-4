@@ -25,3 +25,7 @@ Implements a quadratic voting mechanism, allowing voters to cast votes on propos
 
 - **Quadratic Voting**: Voters can cast votes on proposals, with the cost in tokens being the square of the voting power they wish to use.
 - **Vote Tracking**: Records votes for and against proposals.
+
+### Video Presentation (Pardon my French!)
+
+https://www.loom.com/share/31459a86c013427b9de80256eaec71af?sid=7fd015d6-bcee-47e7-8657-519f13410779
