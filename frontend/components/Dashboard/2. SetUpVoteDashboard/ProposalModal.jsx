@@ -4,10 +4,13 @@ import { ProposalsContext } from '../../../context/Proposals.context';
 import Input from '../../Input';
 import Button from '../../Button';
 import VoteButtons from '../3. StartVoteDashboard/VoteButtons/VoteButtons';
+import { VotersContext } from '../../../context/Voters.context';
 
 function ProposalModal() {
   const { selectedProposal, setSelectedProposal, setProposalModalIsOpen } =
     useContext(ProposalsContext);
+  const { voter } = useContext(VotersContext);
+
   const { currentWorkflow } = useContext(WorkflowContext);
 
   const textareaRef = useRef(null);
@@ -63,7 +66,7 @@ function ProposalModal() {
         </div>
 
         <div className="w-2/3 flex justify-around">
-          {currentWorkflow === 3 && (
+          {currentWorkflow === 3 && voter && (
             <VoteButtons id={Number(selectedProposal.proposalId)} />
           )}
         </div>

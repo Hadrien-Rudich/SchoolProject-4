@@ -17,8 +17,6 @@ function VotingPowerBar() {
         ? 'bg-yellow-500'
         : 'bg-red-500';
 
-  console.log(voter);
-
   return (
     <div className="p-5 w-full flex flex-col items-center gap-10">
       <div className="flex flex-col items-center gap-2">
